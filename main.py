@@ -33,7 +33,6 @@ from kivy.graphics import Rectangle, Color
 import os.path
 from kivy.base import EventLoop
 
-import arabic_reshaper
 class PanelBuilderApp(App):  # display the welcome screen
     def build(self):
         global  sm , ss
@@ -55,12 +54,20 @@ class PanelBuilderApp(App):  # display the welcome screen
 class WelcomeScreen(Screen): #welcomeScreen subclass
     def __init__(self, **kwargs): #constructor method
         super(WelcomeScreen, self).__init__(**kwargs) #init parent
+
         with self.canvas:
-            Color(0.38, 0.88, 0.92,mode='rgb')
+            Color(204/255, 204/255, 204/255,mode='rgb')
             Rectangle(size=(Window.width , Window.height))
         ##################
-        EventLoop.window.bind(on_keyboard=self.hook_keyboard)
+        EventLoop.window.bind(on_keyboard=self.hook_keyboarde)
+        self.mm = 0
 
+
+        with self.canvas:
+
+            Color(45 / 255, 79 / 255, 112 / 255, mode='rgb')
+
+            Rectangle(size=(Window.width * 1., Window.height * 0.12), pos=(Window.width * 0., Window.height * 0.88))
 
 
 
@@ -86,23 +93,19 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
         else:
             self.nv = 4
 
-        with self.canvas:
 
-            Color(0., 0., 0.92,mode='rgb')
-
-            Rectangle(size =(Window.width*1. , Window.height*0.12),pos=(Window.width*0. , Window.height*0.88 ))
 
         bar = FloatLayout()
-        image_point = Image(source='point.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.82, 'y': 0.89},
+        image_point = Image(source='point.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.82, 'y': 0.90},
                     allow_stretch=True, keep_ratio=False)
         point  = Label(text= str(self.data_[0][0]), size_hint =(0.08,0.08),pos_hint={"x":0.74,"top":0.97})
 
-        image_star = Image(source='star.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.51, 'y': 0.89},
+        image_star = Image(source='star.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.51, 'y': 0.90},
                             allow_stretch=True, keep_ratio=False)
         star = Label(text=str(self.nv), size_hint=(0.08, 0.08), pos_hint={"x": 0.41, "top": 0.97})
 
 
-        self.image_home = Image(source='home.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.10, 'y': 0.89},
+        self.image_home = Image(source='home.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.10, 'y': 0.90},
                            allow_stretch=True, keep_ratio=False)
         self.image_home.bind(on_touch_down=self.home)
         bar.add_widget(image_star)
@@ -115,25 +118,38 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
         #####################################################################
 
         welcomePage = FloatLayout()
-        #reshaped_text1 = arabic_reshaper.reshape(u"ابدأ")
-        reshaped_text1 = ('ابدا')
+
+        reshaped_text1 = ar.reshape('ابدا')
         self.bidi_text1 = get_display(reshaped_text1)
-        reshaped_text2 = (u"قائمة الدول")
+        reshaped_text2 = ar.reshape(u"قائمة الدول")
         self.bidi_text2 = get_display(reshaped_text2)
-        reshaped_text3 = (u"اختبر معلوماتك")
+        reshaped_text3 = ar.reshape(u"اختبر معلوماتك")
         self.bidi_text3 = get_display(reshaped_text3)
-        reshaped_text4 = (u"قيم التطبيق")
+        reshaped_text4 = ar.reshape(u"قيم التطبيق")
         self.bidi_text4 = get_display(reshaped_text4)
+        reshaped_text5 = ar.reshape(u"خروج")
+        self.bidi_text5 = get_display(reshaped_text5)
         post_image = Image(source='post_image.png', size_hint=(0.9, 0.26), pos_hint={'x': 0.05, 'y': 0.61},
                             allow_stretch=True, keep_ratio=False)
+        with self.canvas:
+
+            Color(45 / 255, 79 / 255, 112 / 255, mode='rgb')
+
+            Rectangle(size=(Window.width * 0.9, Window.height * 0.1), pos=(Window.width * 0.05, Window.height * 0.06))
+            Rectangle(size=(Window.width * 0.9, Window.height * 0.1), pos=(Window.width * 0.05, Window.height * 0.50))
+            Rectangle(size=(Window.width * 0.9, Window.height * 0.1), pos=(Window.width * 0.05, Window.height * 0.17))
+            Rectangle(size=(Window.width * 0.9, Window.height * 0.1), pos=(Window.width * 0.05, Window.height * 0.28))
+            Rectangle(size=(Window.width * 0.9, Window.height * 0.1), pos=(Window.width * 0.05, Window.height * 0.39))
+
         #welcomeBox1 = Button(text= self.bidi_text1,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.60} ,on_press=self.poptest)
-        welcomeBox2 = Button(text= self.bidi_text2,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.49} ,on_press=self.information)
-        welcomeBox3 = Button(text= self.bidi_text3,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.38} ,on_press=self.top_)
-        welcomeBox4 = Button(text= self.bidi_text4,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.27} ,on_press=self.top_)
-        welcomeBox1 = Button(text= self.bidi_text1,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.60} ,on_press=self.poptest, border =(25, 25, 25, 25))
-        welcomeBox5 = Button(text= 'exit',font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.16} ,on_press=self.exite, background_normal = 'btntst.png',background_down ='post_image.png',)
-        img_ptn1 = Image(source='post_image.png', size_hint=(0.9, 0.1), pos_hint={'x': 0.05, 'top': 0.60},
-                            allow_stretch=True, keep_ratio=False)
+        welcomeBox2 = Button(text= self.bidi_text2 ,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.49} ,on_press=self.information,background_color = (0.,0.,0.,0.),markup = True)
+        welcomeBox3 = Button(text= self.bidi_text3,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.38} ,on_press=self.top_,background_color = (0.,0.,0.,0.))
+        welcomeBox4 = Button(text= self.bidi_text4,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.27} ,on_press=self.top_,background_color = (0.,0.,0.,0.))
+        welcomeBox1 = Button(text= self.bidi_text1,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.60} ,on_press=self.poptest, border =(25, 25, 25, 25),background_color = (0.,0.,0.,0.))
+        welcomeBox5 = Button(text= self.bidi_text5,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.16} ,on_press=self.exite ,background_color = (0.,0.,0.,0.))
+        #img_ptn1 = Image(source='post_image.png', size_hint=(0.9, 0.1), pos_hint={'x': 0.05, 'top': 0.60},
+        #                   allow_stretch=True, keep_ratio=False)
+
 
 
         welcomePage.add_widget(welcomeBox1)
@@ -198,6 +214,7 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
         # y entre [Window.height*0.89 , Window.height*0.97]
 
     def exite(self,inst):
+
         welcomePage = FloatLayout()
         image2 = "non.png"
         img = Image(source=str(image2), size_hint=(1., 1.), pos_hint={'x': 0., 'y': 0.},
@@ -222,19 +239,24 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
     def quit(self,i):
         self.popup.dismiss()
         #App.get_running_app().stop()
-        time.sleep(0.5)
-
         App.get_running_app().stop()
 
-    def hook_keyboard(self, window, key, *largs):
+    def hook_keyboarde(self, window, key, *largs):
+
         # self.name
 
 
+
+
         if key == 27:
-            # print(sm.next())
-            # print(sm.previous())
-            self.exite(0)
-            return  True
+            self.mm += 1
+            print(self.mm)
+            if  self.mm == 1 :
+                self.exite(0)
+                return  True
+            elif self.mm >= 2 :
+                App.get_running_app().stop()
+
 
 
 
@@ -260,9 +282,7 @@ class shose_contry(Screen):
         self.data = self.cur.fetchall()
         ###########################
         with self.canvas:
-
-            Color(0.38, 0.88, 0.92, mode='rgb')
-
+            Color(204 / 255, 204 / 255, 204 / 255, mode='rgb')
             Rectangle(size=(Window.width, Window.height))
 
         #####################################  bar #########################
@@ -287,20 +307,20 @@ class shose_contry(Screen):
 
         with self.canvas:
 
-            Color(0., 0., 0.92, mode='rgb')
+            Color(45 / 255, 79 / 255, 112 / 255, mode='rgb')
 
             Rectangle(size=(Window.width * 1., Window.height * 0.12), pos=(Window.width * 0., Window.height * 0.88))
 
         bar = FloatLayout()
-        image_point = Image(source='point.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.82, 'y': 0.89},
+        image_point = Image(source='point.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.82, 'y': 0.90},
                             allow_stretch=True, keep_ratio=False)
         point = Label(text=str(self.data_[0][0]), size_hint=(0.08, 0.08), pos_hint={"x": 0.74, "top": 0.97})
 
-        image_star = Image(source='star.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.51, 'y': 0.89},
+        image_star = Image(source='star.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.51, 'y': 0.90},
                            allow_stretch=True, keep_ratio=False)
         star = Label(text=str(self.nv), size_hint=(0.08, 0.08), pos_hint={"x": 0.41, "top": 0.97})
 
-        self.image_home = Image(source='home.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.10, 'y': 0.89},
+        self.image_home = Image(source='home.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.10, 'y': 0.90},
                                 allow_stretch=True, keep_ratio=False)
         self.image_home.bind(on_touch_down=self.home)
         bar.add_widget(image_star)
@@ -322,14 +342,23 @@ class shose_contry(Screen):
         self.dropdown2 = DropDown()
 
 
-        self.welcomeBox1 = Button(text= 'ok', size_hint =(0.6,0.1),pos_hint={"x":0.20,"top":0.25} )
+        self.welcomeBox1 = Button(text= 'ok', size_hint =(0.6,0.1),pos_hint={"x":0.20,"top":0.25} ,background_color = (0.,0.,0.,0.))
         #self.welcomeBox2 = Button(text='home page', size_hint=(0.3, 0.1), pos_hint={"x": 0.350, "top": 0.90})
 
 
         #list_contry
         func.add_widget(self.welcomeBox1)
         func.add_widget(bar)
-        reshaped_text1 = (u"اضغط لاختيار بلد")
+        reshaped_text1 = (u"اضغط لاختيار دولة")
+        text_1 = ar.reshape(reshaped_text1)
+        text_1 = get_display(text_1)
+        self.text_1 = text_1
+        with self.canvas:
+            Color(45 / 255, 79 / 255, 112 / 255, mode='rgb')
+            Rectangle(size=(Window.width * 0.44, Window.height * 0.1), pos=(Window.width * 0.51, Window.height * 0.50))
+            Rectangle(size=(Window.width * 0.44, Window.height * 0.1), pos=(Window.width * 0.05, Window.height * 0.50))
+            Rectangle(size=(Window.width * 0.6, Window.height * 0.1), pos=(Window.width * 0.20, Window.height * 0.15))
+
 
 
         for index in self.data:
@@ -337,7 +366,7 @@ class shose_contry(Screen):
             btn.bind(on_release=lambda  btn: self.dropdown.select(btn.text))
             self.dropdown.add_widget(btn)
             # create a big main button
-            self.mainbutton = Button(text='shose to contry',font_name='hemidi', size_hint=(0.44, 0.1), pos_hint={"x": 0.05, "top": 0.60})
+            self.mainbutton = Button(text=text_1,font_name='hemidi', size_hint=(0.44, 0.1), pos_hint={"x": 0.05, "top": 0.60},background_color = (0.,0.,0.,0.))
             self.mainbutton.bind(on_release=self.dropdown.open)
             self.dropdown.bind(on_select=lambda instance, x: setattr(self.mainbutton, 'text', x))
             self.dropdown.bind(on_press=self.return_val)
@@ -350,7 +379,7 @@ class shose_contry(Screen):
             btn2.bind(on_release=lambda btn2: self.dropdown2.select(btn2.text))
             self.dropdown2.add_widget(btn2)
             #################### button drop 2
-            self.mainbutton2 = Button(text='shose to contry',font_name='hemidi', size_hint=(0.44, 0.1), pos_hint={"x": 0.51, "top": 0.60} , id = 'kiv')
+            self.mainbutton2 = Button(text=text_1,font_name='hemidi', size_hint=(0.44, 0.1), pos_hint={"x": 0.51, "top": 0.60} , id = 'kiv',background_color = (0.,0.,0.,0.))
             self.mainbutton2.bind(on_release=self.dropdown2.open)
 
             self.dropdown2.bind(on_select=lambda instance, x: setattr(self.mainbutton2, 'text', x))
@@ -385,7 +414,7 @@ class shose_contry(Screen):
         self.data_ = self.cur_h.fetchall()
         #print(val2,val1)
 
-        if not (val1 == 'shose to contry' or val2 == 'shose to contry') :
+        if not (val1 == self.text_1 or val2 == self.text_1) :
             if not (self.data_[0][0] < 15):
                 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
                 db_path = BASE_DIR.replace("\\", "/") + '/data.db'
@@ -401,7 +430,7 @@ class shose_contry(Screen):
                     m = 0
                 else:
 
-                    m = n - 5
+                    m = n - 4  ##################" -5
 
                 self.cur_h.execute(
                     ''' UPDATE point  SET nombre_point = %s  WHERE nombre_point = %s;''' % (int(m), int(n)))
@@ -436,11 +465,11 @@ class shose_contry(Screen):
 
     def return_jeux (self,instant):
 
-        reshaped_text3= (u"العب و جمع النقاط")
+        reshaped_text3= ar.reshape(u"العب و جمع النقاط")
         self.bidi_text3 = get_display(reshaped_text3)
-        reshaped_text4 = (u"الصفحة الرئيسية")
+        reshaped_text4 = ar.reshape(u"الصفحة الرئيسية")
         self.bidi_text4 = get_display(reshaped_text4)
-        reshaped_text5 = (u"لا تمتلك نقاط كافية لاجراء هته المقارنة")
+        reshaped_text5 = ar.reshape(u"يجب ان تمتلك 15 نقطعة على الاقل ")
         self.bidi_text5 = get_display(reshaped_text5)
 
         welcomePage = FloatLayout()
@@ -449,7 +478,7 @@ class shose_contry(Screen):
                     allow_stretch=True, keep_ratio=False)
         btn1 = Button(text=self.bidi_text4,font_name = 'hemidi' ,size_hint=(0.30, 0.1), pos_hint={"x": 0.19, "top": 0.30})
         btn = Button(text=self.bidi_text3,font_name = 'hemidi' , size_hint=(0.30, 0.1), pos_hint={"x": 0.51, "top": 0.30})
-        label_cont2 = Label(text='[color=ff3333]%s[/color]'%(self.bidi_text5),font_name='hemidi', font_size='20sp',size_hint=(0.4, 0.2), pos_hint={'x': 0.3, 'top': 0.95},markup = True)
+        label_cont2 = Label(text=self.bidi_text5,font_name='hemidi', font_size='20sp',size_hint=(0.4, 0.2), pos_hint={'x': 0.3, 'top': 0.95},markup = True)
 
 
         welcomePage.add_widget(img)
@@ -507,11 +536,8 @@ class list_contry(Screen):
 
     def hh(self,i):
         with self.canvas:
-
-            Color(0.38, 0.88, 0.92,mode='rgb')
-
-            Rectangle(size=(Window.width , Window.height))
-
+            Color(204 / 255, 204 / 255, 204 / 255, mode='rgb')
+            Rectangle(size=(Window.width, Window.height))
         #####################################  bar #########################
 
         # data
@@ -534,20 +560,20 @@ class list_contry(Screen):
 
         with self.canvas:
 
-            Color(0., 0., 0.92, mode='rgb')
+            Color(45 / 255, 79 / 255, 112 / 255, mode='rgb')
 
             Rectangle(size=(Window.width * 1., Window.height * 0.12), pos=(Window.width * 0., Window.height * 0.88))
 
         bar = FloatLayout()
-        image_point = Image(source='point.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.82, 'y': 0.89},
+        image_point = Image(source='point.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.82, 'y': 0.90},
                             allow_stretch=True, keep_ratio=False)
         point = Label(text=str(self.data_[0][0]), size_hint=(0.08, 0.08), pos_hint={"x": 0.74, "top": 0.97})
 
-        image_star = Image(source='star.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.51, 'y': 0.89},
+        image_star = Image(source='star.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.51, 'y': 0.90},
                            allow_stretch=True, keep_ratio=False)
         star = Label(text=str(self.nv), size_hint=(0.08, 0.08), pos_hint={"x": 0.41, "top": 0.97})
 
-        self.image_home = Image(source='home.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.10, 'y': 0.89},
+        self.image_home = Image(source='home.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.10, 'y': 0.90},
                                 allow_stretch=True, keep_ratio=False)
         self.image_home.bind(on_touch_down=self.home)
         bar.add_widget(image_star)
@@ -685,12 +711,12 @@ class result_vs(Screen):
     code = ListProperty()
     def __init__(self,acc, **kwargs ): #constructor method
         super(result_vs, self).__init__(**kwargs) #init parent
-        EventLoop.window.bind(on_keyboard=self.hook_keyboard)
+        EventLoop.window.bind(on_keyboard=self.poptest)
+        self.lk = 0
+        self.lk += 1
         with self.canvas:
-
-            Color(0.38, 0.88, 0.92,mode='rgb')
-
-            Rectangle(size=(Window.width , Window.height))
+            Color(204 / 255, 204 / 255, 204 / 255, mode='rgb')
+            Rectangle(size=(Window.width, Window.height))
 
         #####################################  bar #########################
 
@@ -714,20 +740,20 @@ class result_vs(Screen):
 
         with self.canvas:
 
-            Color(0., 0., 0.92, mode='rgb')
+            Color(45 / 255, 79 / 255, 112 / 255, mode='rgb')
 
             Rectangle(size=(Window.width * 1., Window.height * 0.12), pos=(Window.width * 0., Window.height * 0.88))
 
         self.bar = FloatLayout()
-        image_point = Image(source='point.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.82, 'y': 0.89},
+        image_point = Image(source='point.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.82, 'y': 0.90},
                             allow_stretch=True, keep_ratio=False)
         point = Label(text=str(self.data_[0][0]), size_hint=(0.08, 0.08), pos_hint={"x": 0.74, "top": 0.97})
 
-        image_star = Image(source='star.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.51, 'y': 0.89},
+        image_star = Image(source='star.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.51, 'y': 0.90},
                            allow_stretch=True, keep_ratio=False)
         star = Label(text=str(self.nv), size_hint=(0.08, 0.08), pos_hint={"x": 0.41, "top": 0.97})
 
-        self.image_home = Image(source='home.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.10, 'y': 0.89},
+        self.image_home = Image(source='home.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.10, 'y': 0.90},
                                 allow_stretch=True, keep_ratio=False)
         self.image_home.bind(on_touch_down=self.home)
         self.bar.add_widget(image_star)
@@ -870,17 +896,11 @@ class result_vs(Screen):
 
         sm.switch_to(shose_contry())
 
-    def hook_keyboard(self, window, key, *largs):
-        # self.name
 
-        # print(key)
-
-        if key == 27:
-            # print(sm.next())
-            # print(sm.previous())
-            # EventLoop.window.bind(on_keyboard=self.hook_keyboard)
-            sm.switch_to(shose_contry())
-            return True
+    def poptest(self,window , key , *args):
+        if key == 27 :
+            sm.switch_to(WelcomeScreen())
+            return  True
 
 
 class jeux_embdad(Screen): #welcomeScreen subclass
@@ -890,12 +910,8 @@ class jeux_embdad(Screen): #welcomeScreen subclass
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
 
         with self.canvas:
-            Color(0.38, 0.88, 0.92,mode='rgb')
-            Rectangle(size=(Window.width , Window.height))
-
-        with self.canvas:
-            Color(0.01, 0.01, 0.01,mode='rgb')
-            Rectangle(size=(Window.width*0.24 , Window.height*0.05), pos=(Window.width*0.38 , Window.height*0.80))
+            Color(204 / 255, 204 / 255, 204 / 255, mode='rgb')
+            Rectangle(size=(Window.width, Window.height))
 
 
 
@@ -913,29 +929,35 @@ class jeux_embdad(Screen): #welcomeScreen subclass
 
         if int(self.data_[0][0]) < 15:
             self.nv = 1
+            text2 = u'هذا العلم لاي دولة ؟ '
         elif int(self.data_[0][0]) < 30:
             self.nv = 2
+            text2 = u'هذا الشعار  لاي دولة ؟ '
         elif int(self.data_[0][0]) < 45:
             self.nv = 3
+            text2 = u'هذه الخريطة لاي دولة ؟ '
         else:
             self.nv = 4
+            text2=u'اجب حسب الصورة'
+
+
 
         with self.canvas:
 
-            Color(0., 0., 0.92, mode='rgb')
+            Color(45 / 255, 79 / 255, 112 / 255, mode='rgb')
 
             Rectangle(size=(Window.width * 1., Window.height * 0.12), pos=(Window.width * 0., Window.height * 0.88))
 
         bar = FloatLayout()
-        image_point = Image(source='point.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.82, 'y': 0.89},
+        image_point = Image(source='point.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.82, 'y': 0.90},
                             allow_stretch=True, keep_ratio=False)
         point = Label(text=str(self.data_[0][0]), size_hint=(0.08, 0.08), pos_hint={"x": 0.74, "top": 0.97})
 
-        image_star = Image(source='star.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.51, 'y': 0.89},
+        image_star = Image(source='star.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.51, 'y': 0.90},
                            allow_stretch=True, keep_ratio=False)
         star = Label(text=str(self.nv), size_hint=(0.08, 0.08), pos_hint={"x": 0.41, "top": 0.97})
 
-        self.image_home = Image(source='home.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.10, 'y': 0.89},
+        self.image_home = Image(source='home.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.10, 'y': 0.90},
                                 allow_stretch=True, keep_ratio=False)
         self.image_home.bind(on_touch_down=self.home)
         bar.add_widget(image_star)
@@ -951,7 +973,7 @@ class jeux_embdad(Screen): #welcomeScreen subclass
         ############################
         self.rune = rune
         self.minutes = 0
-        self.seconds = 10
+        self.seconds = 15
         self.file_j = hemidi  ## nome fime soit embadad or flag ect ..
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         db_path = BASE_DIR.replace("\\", "/") + '/data.db'
@@ -1010,8 +1032,10 @@ class jeux_embdad(Screen): #welcomeScreen subclass
             l4 = cont[0]
             welcomeBox4 = Button(text=str(l4), size_hint=(0.44, 0.1), pos_hint={"x": 0.51, "top": 0.22})
             welcomeBox4.bind(on_press=lambda *args: self.result_in(0,l4))
+            text = ar.reshape(text2)
+            self.text_label = get_display(text)
 
-            btn1 = Label(text='hada chi3ar ai dola  ! ! ', size_hint=(0.80,0.1),
+            btn1 = Label(text=self.text_label, font_name = 'hemidi',size_hint=(0.80,0.1),
                               pos_hint={'x': 0.1, 'top': 0.80})
 
 
@@ -1066,7 +1090,7 @@ class jeux_embdad(Screen): #welcomeScreen subclass
             setattr(self.timer_, 'text', "over time")
             XI = 0
 
-        if int(self.XI) == 10 :
+        if int(self.XI) == 15 :
             setattr(jeux_embdad, self.rune, 'non')
             self.result_in(0,'non')
 
@@ -1263,9 +1287,8 @@ class jeux_intro(Screen):
         super(jeux_intro, self).__init__(**kwargs) #init parent
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
         with self.canvas:
-            Color(0.38, 0.88, 0.92,mode='rgb')
-            Rectangle(size=(Window.width , Window.height))
-
+            Color(204 / 255, 204 / 255, 204 / 255, mode='rgb')
+            Rectangle(size=(Window.width, Window.height))
 
         #####################################  bar #########################
 
@@ -1289,20 +1312,20 @@ class jeux_intro(Screen):
 
         with self.canvas:
 
-            Color(0., 0., 0.92, mode='rgb')
+            Color(45 / 255, 79 / 255, 112 / 255, mode='rgb')
 
             Rectangle(size=(Window.width * 1., Window.height * 0.12), pos=(Window.width * 0., Window.height * 0.88))
 
         bar = FloatLayout()
-        image_point = Image(source='point.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.82, 'y': 0.89},
+        image_point = Image(source='point.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.82, 'y': 0.90},
                             allow_stretch=True, keep_ratio=False)
         point = Label(text=str(self.data_[0][0]), size_hint=(0.08, 0.08), pos_hint={"x": 0.74, "top": 0.97})
 
-        image_star = Image(source='star.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.51, 'y': 0.89},
+        image_star = Image(source='star.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.51, 'y': 0.90},
                            allow_stretch=True, keep_ratio=False)
         star = Label(text=str(self.nv), size_hint=(0.08, 0.08), pos_hint={"x": 0.41, "top": 0.97})
 
-        self.image_home = Image(source='home.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.10, 'y': 0.89},
+        self.image_home = Image(source='home.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.10, 'y': 0.90},
                                 allow_stretch=True, keep_ratio=False)
         self.image_home.bind(on_touch_down=self.home)
         bar.add_widget(image_star)
@@ -1510,10 +1533,8 @@ class info_contry(Screen):
         super(info_contry, self).__init__(**kwargs) #init parent
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
         with self.canvas:
-
-            Color(0.38, 0.88, 0.92,mode='rgb')
-
-            Rectangle(size=(Window.width , Window.height))
+            Color(204 / 255, 204 / 255, 204 / 255, mode='rgb')
+            Rectangle(size=(Window.width, Window.height))
 
         #####################################  bar #########################
 
@@ -1537,20 +1558,19 @@ class info_contry(Screen):
 
         with self.canvas:
 
-            Color(0., 0., 0.92, mode='rgb')
+            Color(45 / 255, 79 / 255, 112 / 255, mode='rgb')
 
             Rectangle(size=(Window.width * 1., Window.height * 0.12), pos=(Window.width * 0., Window.height * 0.88))
-
         self.bar = FloatLayout()
-        image_point = Image(source='point.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.82, 'y': 0.89},
+        image_point = Image(source='point.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.82, 'y': 0.90},
                             allow_stretch=True, keep_ratio=False)
         point = Label(text=str(self.data_[0][0]), size_hint=(0.08, 0.08), pos_hint={"x": 0.74, "top": 0.97})
 
-        image_star = Image(source='star.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.51, 'y': 0.89},
+        image_star = Image(source='star.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.51, 'y': 0.90},
                            allow_stretch=True, keep_ratio=False)
         star = Label(text=str(self.nv), size_hint=(0.08, 0.08), pos_hint={"x": 0.41, "top": 0.97})
 
-        self.image_home = Image(source='home.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.10, 'y': 0.89},
+        self.image_home = Image(source='home.png', size_hint=(0.08, 0.08), pos_hint={'x': 0.10, 'y': 0.90},
                                 allow_stretch=True, keep_ratio=False)
         self.image_home.bind(on_touch_down=self.home)
         self.bar.add_widget(image_star)
@@ -1703,13 +1723,16 @@ class info_contry(Screen):
 
 
 if __name__ == '__main__':
-    if not os.path.exists('data.db'):
-        print(os.getcwd())
-        src = os.getcwd()+'/database/data.db'
-        shutil.copy2(src,'data.db')
-    if not os.path.exists("/data/user/0/org.test.myapp/files/app/_python_bundle/site-packages/arabic_reshaper/__version__.py") :
-        dst2 = "/data/user/0/org.test.myapp/files/app/_python_bundle/site-packages/arabic_reshaper/__version__.py"
-        shutil.copy2('__version__.py',dst2)
+    try :
+        import arabic_reshaper as ar
+    except:
+        f = open('/data/user/0/org.test.myapp/files/app/_python_bundle/site-packages/arabic_reshaper/__version__.py', 'w')
+        f.write("__version__ = '2.0.15'")
+        f.close()
+        import arabic_reshaper as ar
+
+
+
 
 
     PanelBuilderApp().run()
