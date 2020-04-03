@@ -32,12 +32,13 @@ from kivy.clock import Clock
 from kivy.graphics import Rectangle, Color
 import os.path
 from kivy.base import EventLoop
-
+from kivy.core.audio import SoundLoader
 class PanelBuilderApp(App):  # display the welcome screen
     def build(self):
         global  sm , ss
         sm = ScreenManager()
         sm.add_widget(WelcomeScreen(name='welcomeScreen'))
+
         sm.add_widget(list_contry(name='list_contry'  ))
         sm.add_widget(shose_contry(name='shose_contry'))
         #sm.add_widget(result_vs(name='result_vs'))
@@ -45,7 +46,11 @@ class PanelBuilderApp(App):  # display the welcome screen
         sm.add_widget(jeux_intro(name = 'jeux_intro'))
         sm.add_widget(info_contry('non' , name = 'info_contry'))
         #sm.add_widget(result_vs(['algeria','algeria'], name='result_vs'))
+        self.sound_non = SoundLoader.load('clk.wav')
+        if self.sound_non:
+            self.sound_non.play()
         return  sm
+
 
 
 
@@ -61,7 +66,7 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
         ##################
         EventLoop.window.bind(on_keyboard=self.hook_keyboarde)
         self.mm = 0
-
+        self.ruselt_exit = False
 
         with self.canvas:
 
@@ -129,7 +134,7 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
         self.bidi_text4 = get_display(reshaped_text4)
         reshaped_text5 = ar.reshape(u"خروج")
         self.bidi_text5 = get_display(reshaped_text5)
-        post_image = Image(source='post_image.png', size_hint=(0.9, 0.26), pos_hint={'x': 0.05, 'y': 0.61},
+        post_image = Image(source='post_image.jpg', size_hint=(0.9, 0.26), pos_hint={'x': 0.05, 'y': 0.61},
                             allow_stretch=True, keep_ratio=False)
         with self.canvas:
 
@@ -164,6 +169,7 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
         welcomePage.add_widget(bar)
 
         self.add_widget(welcomePage)
+
     def btn_(self,i):
         img_ptn2 = Image(source='home.png', size_hint=(0.9, 0.1), pos_hint={'x': 0.05, 'top': 0.60},
                          allow_stretch=True, keep_ratio=False)
@@ -176,10 +182,11 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
 
         welcomePage = FloatLayout()
         image2 = "attn.png"
-        img = Image(source=str(image2), size_hint=(0.40, 0.40), pos_hint={'x': 0.30, 'y': 0.36},
+        img = Image(source=str(image2), size_hint=(0.40, 0.270), pos_hint={'x': 0.30, 'y': 0.36},
                     allow_stretch=True, keep_ratio=False)
         welcomePage.add_widget(img)
-        self.p = Popup(content=welcomePage, auto_dismiss=False , title = 'attendre')
+        self.p = Popup(content=welcomePage, auto_dismiss=False , title = get_display(ar.reshape(u'انتظر')) , title_font = 'hemidi')
+
         self.p.open()
         Clock.schedule_once(self.mo9arana)
         self.p.dismiss()
@@ -192,6 +199,9 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
     def mo9arana(self, instance):
         #sm.add_widget(shose_contry(name='shose_contry'))
         sm.switch_to(shose_contry())
+        self.sound_non = SoundLoader.load('sws.wav')
+        if self.sound_non:
+            self.sound_non.play()
 
 
 
@@ -200,33 +210,49 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
     def information(self,instant):
 
         sm.switch_to(list_contry(name='list_contry'))
+        self.sound_non = SoundLoader.load('sws.wav')
+        if self.sound_non:
+            self.sound_non.play()
+
 
 
     def top_(self,instant):
         ##############################
 
         sm.switch_to(jeux_intro())
+        self.sound_non = SoundLoader.load('sws.wav')
+        if self.sound_non:
+            self.sound_non.play()
+
 
     def home(self,inst,touch):
         if (touch.pos[0] >= Window.width*0.10 and touch.pos[0] <= Window.width*0.18 ) and (touch.pos[1] >= Window.height*0.89 and touch.pos[1] <= Window.height*0.97)  :
             sm.switch_to(WelcomeScreen())
+
         # x entre [Window.width*0.10 , Window.width*0.18 ]
         # y entre [Window.height*0.89 , Window.height*0.97]
 
     def exite(self,inst):
+        self.ruselt_exit = True
+
 
         welcomePage = FloatLayout()
-        image2 = "non.png"
-        img = Image(source=str(image2), size_hint=(1., 1.), pos_hint={'x': 0., 'y': 0.},
+        image2 = "cr.png"
+        img = Image(source=str(image2), size_hint=(0.4, 0.27), pos_hint={'x': 0.30, 'y': 0.36},
                     allow_stretch=True, keep_ratio=False)
-        btn1 = Button(text='quite', size_hint=(0.440, 0.1), pos_hint={"x": 0.05, "top": 0.18})
-        btn = Button(text='continu', size_hint=(0.440, 0.1), pos_hint={"x": 0.51, "top": 0.18})
+        btn1 = Button(text=get_display(ar.reshape(u'خروج')), font_name='hemidi', size_hint=(0.42, 0.1), pos_hint={"x": 0.07, "top": 0.30})
+        btn = Button(text=get_display(ar.reshape(u'لا')), font_name='hemidi', size_hint=(0.42, 0.1), pos_hint={"x": 0.51, "top": 0.30})
+        text = get_display(ar.reshape(u'هل تريد الخروج ؟'))
+        label_cont2 = Label(text=text, font_name='hemidi', font_size='20sp', size_hint=(0.4, 0.2),
+                            pos_hint={'x': 0.3, 'top': 0.95}, markup=True)
+
         welcomePage.add_widget(img)
         welcomePage.add_widget(btn)
         welcomePage.add_widget(btn1)
+        welcomePage.add_widget(label_cont2)
 
         # content = Button(text='Close me!')
-        self.popup = Popup(content=welcomePage, auto_dismiss=False)
+        self.popup = Popup(content=welcomePage, auto_dismiss=False, title = get_display(ar.reshape(u'تاكيد الخروج')) , title_font = 'hemidi' )
         btn.bind(on_press=self.continu_)
         btn1.bind(on_press=self.quit)
         self.popup.open()
@@ -237,25 +263,25 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
         self.popup.dismiss()
         sm.switch_to(WelcomeScreen())
     def quit(self,i):
-        self.popup.dismiss()
+
         #App.get_running_app().stop()
+        #time.sleep(0.5)
+        #self.popup.dismiss()
+        self.popup.dismiss()
         App.get_running_app().stop()
+        #App.get_running_app().is_desktop = 0
+
 
     def hook_keyboarde(self, window, key, *largs):
-
-        # self.name
-
-
-
-
         if key == 27:
-            self.mm += 1
-            print(self.mm)
-            if  self.mm == 1 :
+            if self.ruselt_exit == True :
+                self.popup.dismiss()
                 self.exite(0)
-                return  True
-            elif self.mm >= 2 :
-                App.get_running_app().stop()
+                #App.get_running_app().stop()
+                return True
+            else :
+                self.exite(0)
+                return True
 
 
 
@@ -265,6 +291,7 @@ class shose_contry(Screen):
     def __init__(self, **kwargs): #constructor method
         super(shose_contry, self).__init__(**kwargs) #init parent
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
+        self.ruselt_1 = False
 
 
 
@@ -332,7 +359,7 @@ class shose_contry(Screen):
         # add bar from widgat princibal and add method home
         #####################################################################
 
-        post_image = Image(source='post_image.png', size_hint=(0.9, 0.26), pos_hint={'x': 0.05, 'y': 0.61},
+        post_image = Image(source='post_image.jpg', size_hint=(0.9, 0.26), pos_hint={'x': 0.05, 'y': 0.61},
                            allow_stretch=True, keep_ratio=False)
         post_image2 = Image(source='comparing.jpg', size_hint=(0.9, 0.18), pos_hint={'x': 0.05, 'y': 0.30},
                            allow_stretch=True, keep_ratio=False)
@@ -342,7 +369,8 @@ class shose_contry(Screen):
         self.dropdown2 = DropDown()
 
 
-        self.welcomeBox1 = Button(text= 'ok', size_hint =(0.6,0.1),pos_hint={"x":0.20,"top":0.25} ,background_color = (0.,0.,0.,0.))
+
+        self.welcomeBox1 = Button(text=  get_display(ar.reshape(u'قارن')),font_name = 'hemidi', size_hint =(0.6,0.1),pos_hint={"x":0.20,"top":0.25} ,background_color = (0.,0.,0.,0.))
         #self.welcomeBox2 = Button(text='home page', size_hint=(0.3, 0.1), pos_hint={"x": 0.350, "top": 0.90})
 
 
@@ -443,6 +471,7 @@ class shose_contry(Screen):
                 self.val_ = list([val1, val2])
                 self.puptest(0)
             else :
+                self.ruselt_1 = True
                 self.return_jeux(0)
         else :
             pass
@@ -450,10 +479,10 @@ class shose_contry(Screen):
     def puptest(self,i):
         welcomePage = FloatLayout()
         image2 = "attn.png"
-        img = Image(source=str(image2), size_hint=(0.40, 0.40), pos_hint={'x': 0.30, 'y': 0.36},
+        img = Image(source=str(image2), size_hint=(0.40, 0.27), pos_hint={'x': 0.30, 'y': 0.36},
                     allow_stretch=True, keep_ratio=False)
         welcomePage.add_widget(img)
-        self.p = Popup(content=welcomePage, auto_dismiss=False)
+        self.p = Popup(content=welcomePage, auto_dismiss=False, title = get_display(ar.reshape(u'انتظر')) , title_font = 'hemidi')
         self.p.open()
         Clock.schedule_once(lambda *args: self.eventes(0,self.val_))
         self.p.dismiss()
@@ -462,6 +491,9 @@ class shose_contry(Screen):
     def eventes(self,i,k):
         sm.add_widget(result_vs(k,name='result_vs'))
         sm.switch_to(result_vs(k))
+        self.sound_sws = SoundLoader.load('sws.wav')
+        if self.sound_sws:
+            self.sound_sws.play()
 
     def return_jeux (self,instant):
 
@@ -474,11 +506,12 @@ class shose_contry(Screen):
 
         welcomePage = FloatLayout()
         image2 = "cr.png"
-        img = Image(source=str(image2), size_hint=(0.40, 0.40), pos_hint={'x': 0.30, 'y': 0.36},
+        img = Image(source=str(image2), size_hint=(0.40, 0.27), pos_hint={'x': 0.30, 'y': 0.36},
                     allow_stretch=True, keep_ratio=False)
-        btn1 = Button(text=self.bidi_text4,font_name = 'hemidi' ,size_hint=(0.30, 0.1), pos_hint={"x": 0.19, "top": 0.30})
-        btn = Button(text=self.bidi_text3,font_name = 'hemidi' , size_hint=(0.30, 0.1), pos_hint={"x": 0.51, "top": 0.30})
+        btn1 = Button(text=self.bidi_text4,font_name = 'hemidi' ,size_hint=(0.42, 0.1), pos_hint={"x": 0.07, "top": 0.30})
+        btn = Button(text=self.bidi_text3,font_name = 'hemidi' , size_hint=(0.42, 0.1), pos_hint={"x": 0.51, "top": 0.30})
         label_cont2 = Label(text=self.bidi_text5,font_name='hemidi', font_size='20sp',size_hint=(0.4, 0.2), pos_hint={'x': 0.3, 'top': 0.95},markup = True)
+
 
 
         welcomePage.add_widget(img)
@@ -487,7 +520,8 @@ class shose_contry(Screen):
         welcomePage.add_widget(label_cont2)
 
         # content = Button(text='Close me!')
-        self.popup = Popup(title = 'sorry',content=welcomePage, auto_dismiss=False)
+        self.popup = Popup(content=welcomePage, auto_dismiss=False, title = get_display(ar.reshape(u'للاسف لا يمكن اجراء المقارنة')) , title_font = 'hemidi')
+
 
         # bind the on_press event of the button to the dismiss function
         btn.bind(on_press=self.vers_jeux)
@@ -495,13 +529,22 @@ class shose_contry(Screen):
 
         # open the popup
         self.popup.open()
+        self.sound_non = SoundLoader.load('non.wav')
+        if self.sound_non:
+            self.sound_non.play()
 
     def vers_jeux(self,ins):
         self.popup.dismiss()
         sm.switch_to(jeux_intro())
+        self.sound_sws = SoundLoader.load('sws.wav')
+        if self.sound_sws:
+            self.sound_sws.play()
     def vers_home(self,ins):
         self.popup.dismiss()
         sm.switch_to(WelcomeScreen())
+        self.sound_sws = SoundLoader.load('sws.wav')
+        if self.sound_sws:
+            self.sound_sws.play()
 
 
     def home(self,instant,touch):
@@ -510,6 +553,9 @@ class shose_contry(Screen):
         if (touch.pos[0] >= Window.width*0.10 and touch.pos[0] <= Window.width*0.18 ) and (touch.pos[1] >= Window.height*0.89 and touch.pos[1] <= Window.height*0.97)  :
 
             sm.switch_to(WelcomeScreen())
+            self.sound_sws = SoundLoader.load('sws.wav')
+            if self.sound_sws:
+                self.sound_sws.play()
 
     def hook_keyboard(self, window, key, *largs):
         # self.name
@@ -520,8 +566,20 @@ class shose_contry(Screen):
             # print(sm.next())
             # print(sm.previous())
             #EventLoop.window.bind(on_keyboard=self.hook_keyboard)
-            sm.switch_to(WelcomeScreen())
-            return  True
+            if self.ruselt_1  == True :
+                self.popup.dismiss()
+                sm.switch_to(WelcomeScreen())
+                self.sound_sws = SoundLoader.load('sws.wav')
+                if self.sound_sws:
+                    self.sound_sws.play()
+                return True
+            else :
+
+                sm.switch_to(WelcomeScreen())
+                self.sound_sws = SoundLoader.load('sws.wav')
+                if self.sound_sws:
+                    self.sound_sws.play()
+                return  True
 
 
 class list_contry(Screen):
@@ -589,7 +647,7 @@ class list_contry(Screen):
 
         func = FloatLayout()
 
-        post_image = Image(source='post_image.png', size_hint=(0.9, 0.26), pos_hint={'x': 0.05, 'y': 0.61},
+        post_image = Image(source='post_image.jpg', size_hint=(0.9, 0.26), pos_hint={'x': 0.05, 'y': 0.61},
                            allow_stretch=True, keep_ratio=False)
         func.add_widget(post_image)
 
@@ -625,7 +683,7 @@ class list_contry(Screen):
         #print(self.data[134][28])
         for  i  in range(1) :
             #
-            btn1 =   Button(text=str(self.data[0][28]), size_hint_y=None,pos_hint={'x':0.05 ,'top':None} ,height=40 , on_press =lambda  *args : self.vers_info_contry(0,btn1.text)  ,background_normal = 'BTN.jpg')
+            btn1 =   Button(text=str(self.data[0][28]), size_hint_y=None,pos_hint={'x':0.05 ,'top':None} ,height=40 , on_press =lambda  *args : self.vers_info_contry(0,btn1.text) )
             self.layout.add_widget(btn1)
 
             btn2 =   Button(text=str(self.data[1][28]) , size_hint_y=None,pos_hint={'x':0.05 ,'top':None} ,height=40 , on_press = lambda  *args :  self.vers_info_contry(0,btn2.text) )
@@ -671,6 +729,9 @@ class list_contry(Screen):
         #self.manager.current = 'welcomeScreen'
         if (touch.pos[0] >= Window.width*0.10 and touch.pos[0] <= Window.width*0.18 ) and (touch.pos[1] >= Window.height*0.89 and touch.pos[1] <= Window.height*0.97)  :
             sm.switch_to(WelcomeScreen())
+            self.sound_sws = SoundLoader.load('sws.wav')
+            if self.sound_sws:
+                self.sound_sws.play()
 
 
 
@@ -678,16 +739,19 @@ class list_contry(Screen):
     def vers_info_contry(self,i,inst):
         welcomePage = FloatLayout()
         image2 = "attn.png"
-        img = Image(source=str(image2), size_hint=(0.40, 0.40), pos_hint={'x': 0.30, 'y': 0.36},
+        img = Image(source=str(image2), size_hint=(0.40, 0.270), pos_hint={'x': 0.30, 'y': 0.36},
                     allow_stretch=True, keep_ratio=False)
         welcomePage.add_widget(img)
-        self.p = Popup(content=welcomePage, auto_dismiss=False)
+        self.p = Popup(content=welcomePage, auto_dismiss=False, title = get_display(ar.reshape(u'انتظر')) , title_font = 'hemidi')
         self.p.open()
         Clock.schedule_once(lambda *args: self.vers_info_contry_2(0,inst))
         self.p.dismiss()
 
     def vers_info_contry_2(self,i,inst):
         sm.switch_to(info_contry(inst))
+        self.sound_sws = SoundLoader.load('sws.wav')
+        if self.sound_sws:
+            self.sound_sws.play()
 
     def hook_keyboard(self, window, key, *largs):
         # self.name
@@ -699,6 +763,9 @@ class list_contry(Screen):
             # print(sm.previous())
             #EventLoop.window.bind(on_keyboard=self.hook_keyboard)
             sm.switch_to(WelcomeScreen())
+            self.sound_sws = SoundLoader.load('sws.wav')
+            if self.sound_sws:
+                self.sound_sws.play()
             return  True
 
 
@@ -822,14 +889,14 @@ class result_vs(Screen):
         self.layout.bind(minimum_height=self.layout.setter('height'))
         #https://googledrive.com/host/<folderID>/<filename>
         #https://drive.google.com/uc?id=FILE_ID
-        image1 =  'https://drive.google.com/uc?id=1Wo_j02PZP53uXoIVsw_5jXlkF0QWsnOh'   #flag.png'
-        image1 = AsyncImage(source=image1)
-        image2 = 'flag.png'
-        img = Image(source=image2, size_hint=(0.2866, 0.23), pos_hint={'x': 0.05, 'y': 0.62},
+        image1 =  'flag/'+ acc[0] + '.png'
+        print(acc)
+        image2 = 'flag/'+ acc[1] + '.png'
+        img = Image(source=str(image1), size_hint=(0.2866, 0.15), pos_hint={'x': 0.05, 'y': 0.62},
                     allow_stretch=True, keep_ratio=False)
-        img2 = Image(source=image2, size_hint=(0.2866, 0.23), pos_hint={'x': 0.6566, 'y': 0.62},
+        img2 = Image(source=str(image2), size_hint=(0.2866, 0.15), pos_hint={'x': 0.6566, 'y': 0.62},
                      allow_stretch=True, keep_ratio=False)
-        img3 = Image(source='vs.png', size_hint=(0.2866, 0.23), pos_hint={'x': 0.35, 'y': 0.62},
+        img3 = Image(source='vs.png', size_hint=(0.2866, 0.15), pos_hint={'x': 0.35, 'y': 0.62},
                      allow_stretch=True, keep_ratio=False)
 
         self.func.add_widget(img2)
@@ -888,6 +955,9 @@ class result_vs(Screen):
         if (touch.pos[0] >= Window.width*0.10 and touch.pos[0] <= Window.width*0.18 ) and (touch.pos[1] >= Window.height*0.89 and touch.pos[1] <= Window.height*0.97)  :
 
             sm.switch_to(WelcomeScreen())
+            self.sound_sws = SoundLoader.load('sws.wav')
+            if self.sound_sws:
+                self.sound_sws.play()
     def jeux(self,instant):
         #self.manager.current = 'welcomeScreen'
         #print(self.code)
@@ -895,11 +965,17 @@ class result_vs(Screen):
     def return_(self,window):
 
         sm.switch_to(shose_contry())
+        self.sound_sws = SoundLoader.load('sws.wav')
+        if self.sound_sws:
+            self.sound_sws.play()
 
 
     def poptest(self,window , key , *args):
         if key == 27 :
             sm.switch_to(WelcomeScreen())
+            self.sound_sws = SoundLoader.load('sws.wav')
+            if self.sound_sws:
+                self.sound_sws.play()
             return  True
 
 
@@ -989,6 +1065,7 @@ class jeux_embdad(Screen): #welcomeScreen subclass
 
             #print(self.data_[1][0])
             #print(self.data_[0][0])
+            self.ruselta = False
 
 
             ############################
@@ -1008,35 +1085,46 @@ class jeux_embdad(Screen): #welcomeScreen subclass
             img = Image(source=str(image2), size_hint=(0.90, 0.30), pos_hint={'x': 0.05, 'y': 0.40},
                         allow_stretch=True, keep_ratio=False)
 
+            with self.canvas:
 
+                Color(45 / 255, 79 / 255, 112 / 255, mode='rgb')
 
+                Rectangle(size=(Window.width * 0.44, Window.height * 0.1),
+                          pos=(Window.width * 0.05, Window.height * 0.25))
+                Rectangle(size=(Window.width * 0.44, Window.height * 0.1),
+                          pos=(Window.width * 0.51, Window.height * 0.25))
+                Rectangle(size=(Window.width * 0.44, Window.height * 0.1),
+                          pos=(Window.width * 0.05, Window.height * 0.12))
+                Rectangle(size=(Window.width * 0.44, Window.height * 0.1),
+                          pos=(Window.width * 0.51, Window.height * 0.12))
 
 
 
             l1 = random.choice(cont)
-            welcomeBox1 = Button(text=str(l1), size_hint=(0.44, 0.1), pos_hint={"x": 0.05, "top": 0.35})
+            welcomeBox1 = Button(text=str(l1), size_hint=(0.44, 0.1), pos_hint={"x": 0.05, "top": 0.35},background_color = (0.,0.,0.,0.))
             welcomeBox1.bind(on_press=lambda *args: self.result_in(0,l1))
 
             cont.remove(l1)
             l2 = random.choice(cont)
-            welcomeBox2 = Button(text=str(l2), size_hint=(0.44, 0.1), pos_hint={"x": 0.51, "top": 0.35})
+            welcomeBox2 = Button(text=str(l2), size_hint=(0.44, 0.1), pos_hint={"x": 0.51, "top": 0.35},background_color = (0.,0.,0.,0.))
             welcomeBox2.bind(on_press=lambda *args: self.result_in(0,l2))
 
             cont.remove(l2)
             l3 = random.choice(cont)
-            welcomeBox3 = Button(text=str(l3), size_hint=(0.44, 0.1), pos_hint={"x": 0.05, "top": 0.22})
+            welcomeBox3 = Button(text=str(l3), size_hint=(0.44, 0.1), pos_hint={"x": 0.05, "top": 0.22},background_color = (0.,0.,0.,0.))
             welcomeBox3.bind(on_press=lambda *args: self.result_in(0,l3))
 
 
             cont.remove(l3)
             l4 = cont[0]
-            welcomeBox4 = Button(text=str(l4), size_hint=(0.44, 0.1), pos_hint={"x": 0.51, "top": 0.22})
+            welcomeBox4 = Button(text=str(l4), size_hint=(0.44, 0.1), pos_hint={"x": 0.51, "top": 0.22},background_color = (0.,0.,0.,0.))
             welcomeBox4.bind(on_press=lambda *args: self.result_in(0,l4))
             text = ar.reshape(text2)
             self.text_label = get_display(text)
+            #"[b][color=#070B19]%s[/color][/b]"% ('time')
 
-            btn1 = Label(text=self.text_label, font_name = 'hemidi',size_hint=(0.80,0.1),
-                              pos_hint={'x': 0.1, 'top': 0.80})
+            btn1 = Label(text="[b][color=#070B19]%s[/color][/b]"% (self.text_label), font_name = 'hemidi',size_hint=(0.80,0.1),
+                              pos_hint={'x': 0.1, 'top': 0.80}, markup = True)
 
 
             welcomePage.add_widget(welcomeBox1)
@@ -1047,7 +1135,7 @@ class jeux_embdad(Screen): #welcomeScreen subclass
 
 
             #self.event()
-            self.timer_ = Label(text='niveau %s' % ('non'), size_hint=(0.24, 0.05), pos_hint={"x": 0.38, "top": 0.850})
+            self.timer_ = Label(text="[b][color=#070B19]%s[/color][/b]"% ('time'), size_hint=(0.24, 0.05), pos_hint={"x": 0.38, "top": 0.850}, markup = True)
             welcomePage.add_widget(self.timer_)
 
 
@@ -1076,17 +1164,21 @@ class jeux_embdad(Screen): #welcomeScreen subclass
 
         self.time_ = datetime.timedelta(minutes=self.minutes, seconds=self.seconds)
         l = str(self.time_)
-        print(l)
+        #print(l) afficher timer
 
         XI = 0
 
         if '-1 day' not in str(l):
             #self.root.ids.time.text = 'Time Over!'
-            setattr(self.timer_, 'text', str(l))
+            setattr(self.timer_, 'text', "[b][color=#070B19]%s[/color][/b]"% str(l))
+            self.sound_time = SoundLoader.load('time.wav')
+            if self.sound_time:
+                self.sound_time.play()
             L = int(self.XI)
             L += 1
             self.XI = str(L)
         else :
+            setattr(jeux_embdad, self.rune, 'non')
             setattr(self.timer_, 'text', "over time")
             XI = 0
 
@@ -1108,8 +1200,15 @@ class jeux_embdad(Screen): #welcomeScreen subclass
             setattr(jeux_embdad, self.rune, 'non')
             setattr(jeux_embdad, self.XI, '0')
             sm.switch_to(WelcomeScreen())
+            self.sound_sws = SoundLoader.load('sws.wav')
+            if self.sound_sws:
+                self.sound_sws.play()
 
     def result_in(self,n , l):
+        self.sound_time = SoundLoader.load('time.wav')
+        if self.sound_time:
+            self.sound_time.stop()
+        self.ruselta = True
         self.event.cancel()
         setattr(jeux_embdad , self.rune , 'non')
         setattr(jeux_embdad, self.XI, '0')
@@ -1121,6 +1220,9 @@ class jeux_embdad(Screen): #welcomeScreen subclass
             self.result_false(0)
             #print("noooo")
     def result_tru(self,instant):
+        sound = SoundLoader.load('yes.wav')
+        if sound:
+            sound.play()
         setattr(jeux_embdad, self.rune, 'non')
         setattr(jeux_embdad, self.XI, '0')
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -1143,12 +1245,12 @@ class jeux_embdad(Screen): #welcomeScreen subclass
         image2 = "yes.png"
         img = Image(source=str(image2), size_hint=(1., 1.), pos_hint={'x': 0., 'y': 0.},
                     allow_stretch=True, keep_ratio=False)
-        btn = Button(text='ok', size_hint=(0.70, 0.1), pos_hint={"x": 0.150, "top": 0.18})
+        btn = Button(text=get_display(ar.reshape(u'مواصلة اللعب')), font_name = 'hemidi', size_hint=(0.70, 0.1), pos_hint={"x": 0.150, "top": 0.18})
         btn.bind(on_press=self.vers_)
         welcomePage.add_widget(img)
         welcomePage.add_widget(btn)
         #content = Button(text='Close me!')
-        self.popup = Popup(content=welcomePage, auto_dismiss=False)
+        self.popup = Popup(content=welcomePage, auto_dismiss=False, title = get_display(ar.reshape(u'احسنت لقد كسبت 3 نقاط')) , title_font = 'hemidi')
 
         self.popup.open()
 
@@ -1182,7 +1284,9 @@ class jeux_embdad(Screen): #welcomeScreen subclass
 
 
     def result_false(self,instant):
-
+        self.sound_error = SoundLoader.load('error.wav')
+        if self.sound_error:
+            self.sound_error.play()
         setattr(jeux_embdad, self.rune, 'non')
         setattr(jeux_embdad, self.XI, '0')
         self.event.cancel()
@@ -1211,14 +1315,14 @@ class jeux_embdad(Screen): #welcomeScreen subclass
         image2 = "non.png"
         img = Image(source=str(image2), size_hint=(1., 1.), pos_hint={'x': 0., 'y': 0.},
                     allow_stretch=True, keep_ratio=False)
-        btn1 = Button(text='quite', size_hint=(0.440, 0.1), pos_hint={"x": 0.05, "top": 0.18})
-        btn = Button(text='continu', size_hint=(0.440, 0.1), pos_hint={"x": 0.51, "top": 0.18})
+        btn1 = Button(text=get_display(ar.reshape(u'خروج')), font_name = 'hemidi',size_hint=(0.440, 0.1), pos_hint={"x": 0.05, "top": 0.18})
+        btn = Button(text=get_display(ar.reshape(u'محاولة اخرى')), font_name = 'hemidi',size_hint=(0.440, 0.1), pos_hint={"x": 0.51, "top": 0.18})
         welcomePage.add_widget(img)
         welcomePage.add_widget(btn)
         welcomePage.add_widget(btn1)
 
         # content = Button(text='Close me!')
-        self.popup = Popup(content=welcomePage, auto_dismiss=False)
+        self.popup = Popup(content=welcomePage, auto_dismiss=False, title = get_display(ar.reshape(u'خسرت 3 نقاط')) , title_font = 'hemidi')
 
         # bind the on_press event of the button to the dismiss function
         btn.bind(on_press=self.continu_)
@@ -1230,13 +1334,18 @@ class jeux_embdad(Screen): #welcomeScreen subclass
 
     def quit(self, instant):
         # if result false and shose quite
+        self.sound_error.stop()
         setattr(jeux_embdad, self.rune, 'non')
 
         self.popup.dismiss()
         sm.switch_to(WelcomeScreen())
+        self.sound_sws = SoundLoader.load('sws.wav')
+        if self.sound_sws:
+            self.sound_sws.play()
 
     def continu_(self,instant):
         # if result false and shose continu
+        self.sound_error.stop()
         setattr(jeux_embdad, self.rune, 'non')
         self.popup.dismiss()
         self.problem_continu_ok +=1
@@ -1269,12 +1378,34 @@ class jeux_embdad(Screen): #welcomeScreen subclass
             # print(sm.next())
             # print(sm.previous())
             # EventLoop.window.bind(on_keyboard=self.hook_keyboard)
-            setattr(jeux_embdad, self.rune, 'non')
-            setattr(jeux_embdad, self.XI, '0')
-            self.XI = '0'
+            if  self.ruselta == True :
+                self.event.cancel()
+                setattr(jeux_embdad, self.rune, 'non')
+                setattr(jeux_embdad, self.XI, '0')
+                self.XI = '0'
+                self.popup.dismiss()
+                sm.switch_to(jeux_intro())
+                self.sound_sws = SoundLoader.load('sws.wav')
+                if self.sound_sws:
+                    self.sound_sws.play()
 
-            sm.switch_to(jeux_intro())
-            return True
+
+
+                return  True
+            else :
+
+                self.event.cancel()
+                setattr(jeux_embdad, self.rune, 'non')
+                setattr(jeux_embdad, self.XI, '0')
+                self.XI = '0'
+
+                sm.switch_to(jeux_intro())
+                self.sound_sws = SoundLoader.load('sws.wav')
+                if self.sound_sws:
+                    self.sound_sws.play()
+
+
+                return True
 
 
 
@@ -1355,9 +1486,9 @@ class jeux_intro(Screen):
             self.nv = 1
         elif int(self.data_[0][0]) < 30:
             self.nv = 2
-        elif int(self.data_[0][0]) < 50:
+        elif int(self.data_[0][0]) < 45:
             self.nv = 3
-        else:
+        elif int(self.data_[0][0]) >= 45 :
             self.nv = 4
 
         image1 = 'frm.jpg'
@@ -1375,7 +1506,7 @@ class jeux_intro(Screen):
             image2 = 'ovr.jpg'
         if self.nv > 3 :
             image3 = 'ovr.jpg'
-        if self.nv >= 4 :
+        if int(self.data_[0][0]) >= 60 :
             image4 = 'ovr.jpg'
 
         if self.nv == 1 :
@@ -1398,7 +1529,7 @@ class jeux_intro(Screen):
 
                 image4_p = self.calc(0, 15)
 
-        post_image = Image(source='post_image.png', size_hint=(0.9, 0.26), pos_hint={'x': 0.05, 'y': 0.61},
+        post_image = Image(source='post_image.jpg', size_hint=(0.9, 0.26), pos_hint={'x': 0.05, 'y': 0.61},
                            allow_stretch=True, keep_ratio=False)
         img1 = Image(source=str(image1), size_hint=(0.3, 0.200), pos_hint={'x': 0.15, 'y': 0.38},
                     allow_stretch=True, keep_ratio=False)
@@ -1483,7 +1614,10 @@ class jeux_intro(Screen):
         if (touch.pos[0] >= Window.width * 0.15 and touch.pos[0] <= Window.width * 0.45) and (
                 touch.pos[1] >= Window.height * 0.38 and touch.pos[1] <= Window.height * 0.58):
             if int(self.data_[0][0]) < 15 :
-                sm.switch_to(jeux_embdad("flag",'yes')) 
+                sm.switch_to(jeux_embdad("flag",'yes'))
+                self.sound_sws = SoundLoader.load('sws.wav')
+                if self.sound_sws:
+                    self.sound_sws.play()
 
 
         if (touch.pos[0] >= Window.width * 0.55 and touch.pos[0] <= Window.width * 0.85) and (
@@ -1492,18 +1626,27 @@ class jeux_intro(Screen):
             if int(self.data_[0][0]) < 30  and int(self.data_[0][0]) >= 15:
 
                 sm.switch_to(jeux_embdad("embadad", 'yes'))
+                self.sound_sws = SoundLoader.load('sws.wav')
+                if self.sound_sws:
+                    self.sound_sws.play()
 
         if (touch.pos[0] >= Window.width * 0.15 and touch.pos[0] <= Window.width * 0.45) and (
                 touch.pos[1] >= Window.height * 0.10 and touch.pos[1] <= Window.height * 0.30):
             if int(self.data_[0][0]) < 45  and int(self.data_[0][0]) >= 30 :
                 sm.switch_to(jeux_embdad("map",'yes'))
+                self.sound_sws = SoundLoader.load('sws.wav')
+                if self.sound_sws:
+                    self.sound_sws.play()
         
 
 
         if (touch.pos[0] >= Window.width * 0.55 and touch.pos[0] <= Window.width * 0.85) and (
                 touch.pos[1] >= Window.height * 0.10 and touch.pos[1] <= Window.height * 0.30):
-            if int(self.data_[0][0]) > 45  :
+            if int(self.data_[0][0]) >= 45  :
                 sm.switch_to(jeux_embdad("map", 'yes'))
+                self.sound_sws = SoundLoader.load('sws.wav')
+                if self.sound_sws:
+                    self.sound_sws.play()
 
 
 
@@ -1514,6 +1657,9 @@ class jeux_intro(Screen):
         if (touch.pos[0] >= Window.width*0.10 and touch.pos[0] <= Window.width*0.18 ) and (touch.pos[1] >= Window.height*0.89 and touch.pos[1] <= Window.height*0.97)  :
 
             sm.switch_to(WelcomeScreen())
+            self.sound_sws = SoundLoader.load('sws.wav')
+            if self.sound_sws:
+                self.sound_sws.play()
     def hook_keyboard(self, window, key, *largs):
         # self.name
 
@@ -1524,6 +1670,9 @@ class jeux_intro(Screen):
             # print(sm.previous())
             # EventLoop.window.bind(on_keyboard=self.hook_keyboard)
             sm.switch_to(WelcomeScreen())
+            self.sound_sws = SoundLoader.load('sws.wav')
+            if self.sound_sws:
+                self.sound_sws.play()
             return True
 
 class info_contry(Screen):
@@ -1625,10 +1774,6 @@ class info_contry(Screen):
                 for e in i:
                     v_contry1.append(e)
 
-        #print(len(self.status))
-        #print(len(self.v_contry1))
-        #print(len(self.v_contry2))
-
         self.func = FloatLayout()
 
         self.layout = GridLayout(cols=2, spacing=10, size_hint_y=None, pos_hint={"centre_x": 0.02})
@@ -1638,13 +1783,36 @@ class info_contry(Screen):
         #https://drive.google.com/uc?id=FILE_ID
         image1 =  'https://drive.google.com/uc?id=1Wo_j02PZP53uXoIVsw_5jXlkF0QWsnOh'   #flag.png'
         image1 = AsyncImage(source=image1)
+        #print(acc) # nome contry  acc
+        image_flag1 = 'flag/' + acc  + '.jpg'
+        image_embdad1 = 'embadad/' + acc + '.png'
+        image_map1 = 'map/'+acc + '.jpg'
         image2 = 'flag.png'
-        img = Image(source=image2, size_hint=(0.90, 0.23), pos_hint={'x': 0.05, 'y': 0.62},
+        text_flag = u'العلم'
+        text_flag = ar.reshape(text_flag)
+        tx = get_display(text_flag)
+        text_embdad = u'الشعار'
+        text_embdad = ar.reshape(text_embdad)
+        tx2 = get_display(text_embdad)
+        text_map = u'الخريطة'
+        text_map = ar.reshape(text_map)
+        tx3 = get_display(text_map)
+        label_flag =  Label(text="[b][color=#070B19]%s[/color][/b]"% (tx),font_name = 'hemidi', size_hint=(0.3, 0.05), pos_hint={"x": 0.70/2, "top": 0.87},markup = True)
+        img_flag = Image(source=image_flag1, size_hint=(0.90, 0.15), pos_hint={'x': 0.10/2, 'y': 0.67},
+                    allow_stretch=True, keep_ratio=False)
+        label_embdad = Label(text="[b][color=#070B19]%s[/color][/b]"% (tx2),font_name = 'hemidi', size_hint=(0.3, 0.05), pos_hint={"x": 0.1, "top": 0.66} , markup = True)
+        img_embdad = Image(source=image_embdad1, size_hint=(0.88/2, 0.15), pos_hint={'x': 0.10/2, 'y': 0.46},
+                    allow_stretch=True, keep_ratio=False)
+        label_map = Label(text="[b][color=#070B19]%s[/color][/b]"% (tx3), font_name = 'hemidi',size_hint=(0.3, 0.05), pos_hint={"x": 0.6, "top": 0.66},markup = True)
+        img_map = Image(source=image_map1, size_hint=(0.88/2, 0.15), pos_hint={'x': (0.88/2)+0.06, 'y': 0.46},
                     allow_stretch=True, keep_ratio=False)
 
-
-
-        self.func.add_widget(img)
+        self.func.add_widget(img_flag)
+        self.func.add_widget(label_flag)
+        self.func.add_widget(label_embdad)
+        self.func.add_widget(img_embdad)
+        self.func.add_widget(label_map)
+        self.func.add_widget(img_map)
 
         self.func.add_widget(self.bar)
 
@@ -1680,7 +1848,7 @@ class info_contry(Screen):
             setattr(self.btn1, 'text', self.bidi_text)
 
         self.root = ScrollView(size_hint=(0.90, None), size=(Window.width, Window.height),
-                          pos_hint={"x": 0.05, "top": 0.59})  # , size=(Window.width, Window.height)
+                          pos_hint={"x": 0.05, "top": 0.45})  # , size=(Window.width, Window.height)
         self.root.add_widget(self.layout)
         self.func.add_widget(self.root)
         self.add_widget(self.func)
@@ -1699,6 +1867,9 @@ class info_contry(Screen):
         if (touch.pos[0] >= Window.width * 0.10 and touch.pos[0] <= Window.width * 0.18) and (
                 touch.pos[1] >= Window.height * 0.89 and touch.pos[1] <= Window.height * 0.97):
             sm.switch_to(WelcomeScreen())
+            self.sound_sws = SoundLoader.load('sws.wav')
+            if self.sound_sws:
+                self.sound_sws.play()
 
 
 
@@ -1719,6 +1890,9 @@ class info_contry(Screen):
             # print(sm.previous())
             # EventLoop.window.bind(on_keyboard=self.hook_keyboard)
             sm.switch_to(list_contry())
+            self.sound_sws = SoundLoader.load('sws.wav')
+            if self.sound_sws:
+                self.sound_sws.play()
             return True
 
 
