@@ -1,6 +1,8 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import datetime
+import kivy
+kivy.require('1.9.1')
 from kivy.app import App
 from kivy.uix.label import Label
 from kivy.uix.floatlayout import FloatLayout
@@ -33,17 +35,79 @@ from kivy.graphics import Rectangle, Color
 import os.path
 from kivy.base import EventLoop
 from kivy.core.audio import SoundLoader
+from kivy.base import stopTouchApp
+
+
+
 class PanelBuilderApp(App):  # display the welcome screen
     def build(self):
+        global  dect , status1
+        dect = {'united-states-of-america':u'امريكا' , 'russia': u'روسيا' , 'china': u'الصين' ,  'india': u'الهند'  ,
+        'japan': u'اليابان'  , 'south-korea': u'كورياالجنوبية' , 'france' :u'فرنسا'  , 'united-kingdom': u'بريطانيا' , 'egypt': u'مصر' , 'brazil': u'البرازيل' , 'turkey': u'تركيا',
+        'italy': u'ايطاليا', 'germany': u'المانيا' , 'iran': u'ايران', 'pakistan': u'باكستان' , 'indonesia': u'اندونيسيا', 'saudi-arabia': u'السعودية' , 'israel': u'اسرائيل' ,
+        'australia': u'اوستراليا' , 'spain': u'اسبانيا' , 'poland': u'امركيا' , 'vietnam': u'فيتنام' , 'canada':  u'كندا', 'north-korea': u'كورياالشمالية' , 'taiwan': u'تايوان' , 'ukraine': u'اوكرانيا' ,
+          'algeria': u'الجزائر' , 'south-africa': u'جنوب افريقيا' , 'switzerland':u'سويسرا'  , 'norway': u'النرويج' , 'sweden': u'السويد' , 'greece': u'اليونان' , 'czech-republic':u'التشيك'  ,
+        'myanmar': u'مينمار' , 'netherlands': u'هولندا' , 'colombia': u'كولومبيا'  , 'mexico': u'المكسيك' , 'romania': u'رومانيا' , 'peru' : u'بيرو','venezuela': u'فنزويلا' , 'nigeria': u'نيجيريا' ,
+        'argentina':  u' الارجنتين' , 'malaysia': u'ماليزيا' ,'united-arab-emirates': u'الامارات' , 'bangladesh': u'بنغلاديش' ,
+                'chile': u'تشيلي' , 'denmark': u'الدنمارك' , 'iraq': u'العراق' ,  'singapore': u'سنغافورا' , 'syria': u'سوريا' , 'morocco': u'المغرب' , 'portugal': u'البرتغال' ,
+        'ethiopia': u'اثيوبيا' , 'serbia': u'صربيا' ,'croatia': u'كرواتيا' , 'belgium': u'بلجيكا' , 'jordan': u'الاردن' , 'cuba': u'كوبا' , 'yemen': u'اليمن',
+         'oman': u'عمان', 'sudan': u'السودان' , 'libya': u'ليبيا' , 'tunisia': u'تونس' , 'kuwait': u'الكويت' , 'qatar': u'قطر' ,
+        'bahrain':  u'البحرين' , 'ghana': u'غانا'  , 'south-sudan':  u'جنب السودان' , 'lebanon': u'لبنان', 'thailand': u'تايلاند'}
+        #print(len(dect))
+        status1 = [
+
+            u'ميزانية الدفاع',
+            u'الرؤوس النووية',
+            u'كاسحة الغام',
+            u'غواصة',
+            u'كورفيت',
+            u'مدمرة',
+            u'فرقاطة',
+            u'حاملات الطائرات',
+            u'مجموع القطع البحرية',
+            u'هيليكوبتر هجومية',
+            u'مجموع الهليكوبتر',
+            u'طائرات التدريب',
+            u'طائرات النقل',
+            u'مقاتلات هجومية',
+            u'مقاتلات',
+            u'مجموع الطائرات',
+            u'انظمة الصواريخ',
+            u'مدافع',
+            u'مدافع ذاتية',
+            u'مدرعات',
+            u'دبابات',
+            u'القوات الاحتياطية',
+            u'القوات في الخدمة',
+            u'مجموع الجنود',
+            u'بلوغ السن العسكري سنويا',
+            u'صالح للخدمة',
+            u'القوى العاملة',
+            u'عدد السكان',
+            u'الدولة',
+            u'التصنيف العالمي',
+            u'الدين الخارجي',
+            u'احتياطي النفط(برميل)',
+           u'استهلاك النفط(برميل / ي)' ,
+            u'انتاج النفط(برميل / ي)' ,
+            u'الممرات المائية(كم)' ,
+            u'عدد المطارات',
+            u'طول الساحل(كم)',
+            u'طول السكك الحديدة(كم)',
+            u'الطرق المعبدة(كم)',
+            u'المساحة(كم/مربع)',
+
+        ]
         global  sm , ss
         sm = ScreenManager()
         sm.add_widget(WelcomeScreen(name='welcomeScreen'))
 
-        sm.add_widget(list_contry(name='list_contry'  ))
+
         sm.add_widget(shose_contry(name='shose_contry'))
         #sm.add_widget(result_vs(name='result_vs'))
         sm.add_widget(jeux_embdad(str('flag'),'non',name='jeux_embdad'))
         sm.add_widget(jeux_intro(name = 'jeux_intro'))
+        sm.add_widget(list_contry(name='list_contry'))
         sm.add_widget(info_contry('non' , name = 'info_contry'))
         #sm.add_widget(result_vs(['algeria','algeria'], name='result_vs'))
         self.sound_non = SoundLoader.load('clk.wav')
@@ -53,7 +117,13 @@ class PanelBuilderApp(App):  # display the welcome screen
 
 
 
+    """ def stop(self, *largs):
+        self.root_window.close()  # Fix app exit on Android.
 
+        #stopTouchApp()
+        return super(PanelBuilderApp, self).stop(*largs)
+    def on_stop(self):
+        return True"""
 
 
 class WelcomeScreen(Screen): #welcomeScreen subclass
@@ -151,7 +221,7 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
         welcomeBox3 = Button(text= self.bidi_text3,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.38} ,on_press=self.top_,background_color = (0.,0.,0.,0.))
         welcomeBox4 = Button(text= self.bidi_text4,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.27} ,on_press=self.top_,background_color = (0.,0.,0.,0.))
         welcomeBox1 = Button(text= self.bidi_text1,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.60} ,on_press=self.poptest, border =(25, 25, 25, 25),background_color = (0.,0.,0.,0.))
-        welcomeBox5 = Button(text= self.bidi_text5,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.16} ,on_press=self.exite ,background_color = (0.,0.,0.,0.))
+        welcomeBox5 = Button(text= self.bidi_text5,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.16} ,on_press=self.exite ,background_color = (0.,0.,0.,0.)) # self.exite
         #img_ptn1 = Image(source='post_image.png', size_hint=(0.9, 0.1), pos_hint={'x': 0.05, 'top': 0.60},
         #                   allow_stretch=True, keep_ratio=False)
 
@@ -262,13 +332,44 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
     def continu_(self,i):
         self.popup.dismiss()
         sm.switch_to(WelcomeScreen())
-    def quit(self,i):
-
+    def quit(self,*args):
         #App.get_running_app().stop()
         #time.sleep(0.5)
         #self.popup.dismiss()
         self.popup.dismiss()
-        App.get_running_app().stop()
+        #App.get_running_app().stop()
+        #App.get_running_app().stop()
+        #App.root_window.close()
+        #self.root_window.close()  # Fix app exit on Android.
+        #return super(MyApp, self).stop(*largs)
+
+        #PanelBuilderApp.root_window()
+        #stopTouchApp()
+        #self.get_root_window().close()
+        #PanelBuilderApp().on_stop()
+        #stopTouchApp()
+        #App.get_running_app().stop()
+        #App.get_running_app().stop()
+        #return  True
+        #PanelBuilderApp().stop()
+        #Window.close()
+        #stopTouchApp()
+        try:
+            App.root_window.close()
+        except :
+            try:
+                App.stop()
+            except :
+                PanelBuilderApp().stop()
+
+
+
+
+
+
+
+
+
         #App.get_running_app().is_desktop = 0
 
 
@@ -276,14 +377,12 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
         if key == 27:
             if self.ruselt_exit == True :
                 self.popup.dismiss()
-                self.exite(0)
-                #App.get_running_app().stop()
+
+                App.get_running_app().stop()
                 return True
             else :
                 self.exite(0)
                 return True
-
-
 
 
 class shose_contry(Screen):
@@ -390,7 +489,7 @@ class shose_contry(Screen):
 
 
         for index in self.data:
-            btn = Button(text='%s' % index[28], size_hint_y=None, height=44)
+            btn = Button(text=get_display(ar.reshape(dect.get(index[28]))),font_name = 'hemidi' , size_hint_y=None, height=55)
             btn.bind(on_release=lambda  btn: self.dropdown.select(btn.text))
             self.dropdown.add_widget(btn)
             # create a big main button
@@ -403,7 +502,7 @@ class shose_contry(Screen):
             #func.add_widget(dropdown)
         #self.add_widget(dropdown)
         for index in self.data:
-            btn2 = Button(text='%s' % index[28], size_hint_y=None, height=44 ,on_release=lambda btn: self.return_val)
+            btn2 = Button(text=get_display(ar.reshape(dect.get(index[28]))), font_name = 'hemidi',size_hint_y=None, height=55 ,on_release=lambda btn: self.return_val)
             btn2.bind(on_release=lambda btn2: self.dropdown2.select(btn2.text))
             self.dropdown2.add_widget(btn2)
             #################### button drop 2
@@ -428,10 +527,26 @@ class shose_contry(Screen):
         val2 = self.mainbutton2.text
         #self.val1 = 'f'
 
+    def get_key(self,i,val):
+        #print(val)
+        for i in dect.values():
 
-    def return_val(self,instant):
-        val2 =  self.mainbutton2.text
-        val1 = self.mainbutton.text
+
+            if val == get_display(ar.reshape(i)):
+                for key, value in dect.items():
+                    # print(val , value)
+                    if i == value:
+                        return key
+            else :
+                #return 'nnnnnnn'
+                pass
+
+
+    def return_val(self,instant ):
+
+        val2 =  self.get_key(0,self.mainbutton2.text) #dect[self.get_key(0,get_display(ar.reshape(self.mainbutton2.text)))]
+        val1 =  self.get_key(0,self.mainbutton.text)
+        print(val1 , val2)
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         db_path = BASE_DIR.replace("\\", "/") + '/data.db'
         self.file_h = (db_path)
@@ -651,9 +766,12 @@ class list_contry(Screen):
                            allow_stretch=True, keep_ratio=False)
         func.add_widget(post_image)
 
-        self.layout = GridLayout(cols=1, spacing=10, size_hint_y=None , pos_hint ={"centre_x":0.30})
+        self.layout = GridLayout(cols=1, spacing=10, size_hint=(1., None), pos_hint ={"centre_x":0.30} , height= 1920)
         # Make sure the height is such that there is something to scroll.
+        #self.layout.bind(minimum_height=self.layout.setter('height'))
+        #self.layout = ObjectProperty(None)
         self.layout.bind(minimum_height=self.layout.setter('height'))
+
 
 
         ########################"
@@ -681,43 +799,96 @@ class list_contry(Screen):
          """
         # add button manuale  20/03/2020
         #print(self.data[134][28])
-        for  i  in range(1) :
-            #
-            btn1 =   Button(text=str(self.data[0][28]), size_hint_y=None,pos_hint={'x':0.05 ,'top':None} ,height=40 , on_press =lambda  *args : self.vers_info_contry(0,btn1.text) )
-            self.layout.add_widget(btn1)
+        """        ml=1
+        for i in self.data:
+            self.btn = Button(text=i[28], font_name='hemidi', size_hint_y=None, size_hint_x=1.,
+                              pos_hint={'x': 0., 'top': None}, height=80 , id=str(ml),on_release =  lambda  *args : self.vers_info_contry(0,self.btn.text) )  #on_press =lambda  *args : self.vers_info_contry(0,self.btn.text))
+            self.layout.add_widget(self.btn)
+           
 
-            btn2 =   Button(text=str(self.data[1][28]) , size_hint_y=None,pos_hint={'x':0.05 ,'top':None} ,height=40 , on_press = lambda  *args :  self.vers_info_contry(0,btn2.text) )
-            self.layout.add_widget(btn2)
-            btn3 =   Button(text=str(self.data[2][28]) , size_hint_y=None,pos_hint={'x':0.05 ,'top':None} ,height=40 , on_press =lambda  *args :   self.vers_info_contry(0,btn3.text) )
-            self.layout.add_widget(btn3)
-            btn4 =   Button(text=str(self.data[3][28]) , size_hint_y=None,pos_hint={'x':0.05 ,'top':None} ,height=40 , on_press = lambda  *args : self.vers_info_contry(0,btn4.text) )
-            self.layout.add_widget(btn4)
-            btn5 =   Button(text=str(self.data[4][28]) , size_hint_y=None,pos_hint={'x':0.05 ,'top':None} ,height=40 , on_press = lambda  *args :  self.vers_info_contry(0,btn5.text) )
-            self.layout.add_widget(btn5)
-            btn6 =   Button(text=str(self.data[5][28]) , size_hint_y=None,pos_hint={'x':0.05 ,'top':None} ,height=40 , on_press =lambda  *args :  self.vers_info_contry(0,btn6.text) )
-            self.layout.add_widget(btn6)
-            btn7 =   Button(text=str(self.data[6][28]) , size_hint_y=None,pos_hint={'x':0.05 ,'top':None} ,height=40 , on_press = lambda  *args : self.vers_info_contry(0,btn7.text) )
-            self.layout.add_widget(btn7)
-            btn8 =   Button(text=str(self.data[7][28]) , size_hint_y=None,pos_hint={'x':0.05 ,'top':None} ,height=40 , on_press = lambda  *args : self.vers_info_contry(0,btn8.text) )
-            self.layout.add_widget(btn8)
-            btn9 =   Button(text=str(self.data[8][28]) , size_hint_y=None,pos_hint={'x':0.05 ,'top':None} ,height=40 , on_press = lambda  *args : self.vers_info_contry(0,btn9.text) )
-            self.layout.add_widget(btn9)
-            btn10 =   Button(text=str(self.data[9][28]) , size_hint_y=None,pos_hint={'x':0.05 ,'top':None} ,height=40 , on_press =lambda  *args :  self.vers_info_contry(0,btn10.text) )
-            self.layout.add_widget(btn10)
-            btn11 =   Button(text=str(self.data[10][28]) , size_hint_y=None,pos_hint={'x':0.05 ,'top':None} ,height=40 , on_press = lambda  *args : self.vers_info_contry(0,btn11.text) )
-            self.layout.add_widget(btn11)
-            btn12 =   Button(text=str(self.data[11][28]) , size_hint_y=None,pos_hint={'x':0.05 ,'top':None} ,height=40 , on_press = lambda  *args : self.vers_info_contry(0,btn12.text) )
-            self.layout.add_widget(btn12)
-            btn13 =   Button(text=str(self.data[12][28]) , size_hint_y=None,pos_hint={'x':0.05 ,'top':None} ,height=40 , on_press = lambda  *args : self.vers_info_contry(0,btn13.text) )
-            self.layout.add_widget(btn13)
+           """
+
+
+        #print(len(self.data))
+        """h = []
+        for i in self.data :
+            h.append(i[28])
+        print(h)
+        print('************')
+        for  l  in dect.keys() :
+            if l not in h :
+                print(l)"""
 
 
 
+        self.btn1 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[0][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[0][28])) )
+        self.btn2 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[1][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[1][28])) )
+        self.btn3 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[2][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[2][28])) )
+        self.btn4 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[3][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[3][28])) )
+        self.btn5 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[4][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[4][28])) )
+        self.btn6 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[5][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[5][28])) )
+        self.btn7 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[6][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[6][28])) )
+        self.btn8 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[7][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[7][28])) )
+        self.btn9 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[8][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[8][28])) )
+        self.btn10 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[9][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[9][28])) )
+        self.btn11=   Button(text=get_display(ar.reshape(dect.get(str(self.data[10][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[10][28])) )
+        self.btn12 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[11][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[11][28])) )
+        self.btn13 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[12][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[12][28])) )
+        self.btn14 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[13][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[13][28])) )
+        self.btn15 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[14][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[14][28])) )
+        self.btn16=   Button(text=get_display(ar.reshape(dect.get(str(self.data[15][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[15][28])) )
+        self.btn17 =  Button(text=get_display(ar.reshape(dect.get(str(self.data[16][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[16][28])) )
+        self.btn18 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[17][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[17][28])) )
+        self.btn19 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[18][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[18][28])) )
+        self.btn20 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[19][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[19][28])) )
+        self.btn21 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[20][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[20][28])) )
+        self.btn22 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[21][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[21][28])) )
+        self.btn23=   Button(text=get_display(ar.reshape(dect.get(str(self.data[22][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[22][28])) )
+        self.btn24=   Button(text=get_display(ar.reshape(dect.get(str(self.data[23][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[23][28])) )
+        self.btn25=   Button(text=get_display(ar.reshape(dect.get(str(self.data[24][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[24][28])) )
+        self.btn26=   Button(text=get_display(ar.reshape(dect.get(str(self.data[25][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[25][28])) )
+        self.btn27=   Button(text=get_display(ar.reshape(dect.get(str(self.data[26][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[26][28])) )
+        self.btn28=   Button(text=get_display(ar.reshape(dect.get(str(self.data[27][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[27][28])) )
+        self.btn29=   Button(text=get_display(ar.reshape(dect.get(str(self.data[28][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[28][28])) )
+        self.btn30=   Button(text=get_display(ar.reshape(dect.get(str(self.data[29][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[29][28])) )
+        self.btn31=   Button(text=get_display(ar.reshape(dect.get(str(self.data[30][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[30][28])) )
+        self.btn32=   Button(text=get_display(ar.reshape(dect.get(str(self.data[31][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[31][28])) )
+        self.btn33=   Button(text=get_display(ar.reshape(dect.get(str(self.data[32][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[32][28])) )
+        self.btn34=   Button(text=get_display(ar.reshape(dect.get(str(self.data[33][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[33][28])) )
+        self.btn35=   Button(text=get_display(ar.reshape(dect.get(str(self.data[34][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[34][28])) )
+        self.btn36=   Button(text=get_display(ar.reshape(dect.get(str(self.data[35][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[35][28])) )
+        self.btn37=   Button(text=get_display(ar.reshape(dect.get(str(self.data[36][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[36][28])) )
+        self.btn38=   Button(text=get_display(ar.reshape(dect.get(str(self.data[37][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[37][28])) )
+        self.btn39=   Button(text=get_display(ar.reshape(dect.get(str(self.data[38][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[38][28])) )
+        self.btn40 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[39][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[39][28])) )
+
+        lst  = [self.btn1,self.btn2,self.btn3,self.btn4,self.btn5 , self.btn6 , self.btn7,self.btn8,self.btn9,self.btn10,self.btn11,self.btn12 , self.btn13  ,
+                self.btn14, self.btn15, self.btn16, self.btn17, self.btn18, self.btn19, self.btn20, self.btn21, self.btn22,
+                self.btn23, self.btn24, self.btn25, self.btn26 ,
+                self.btn27, self.btn28, self.btn29, self.btn30, self.btn31, self.btn32, self.btn33, self.btn34, self.btn35,
+                self.btn36, self.btn37, self.btn38, self.btn39 , self.btn40
 
 
-        root = ScrollView(size_hint=(0.90, None) ,size=(Window.width, Window.height), pos_hint={"x":0.05,"top":0.60} ) #, size=(Window.width, Window.height)
-        root.add_widget(self.layout)
-        func.add_widget(root)
+                ]
+        i = 0
+        for  ig  in  lst :
+            """self.btn1 = Button(text=str(ig[28]), size_hint_y=None, size_hint_x=1.,
+                               pos_hint={'x': 0.05, 'top': None}, height=60,on_press=lambda *args: self.vers_info_contry(0, ig[28])
+                              )"""
+
+            self.layout.add_widget(ig)
+        #print(self.btn1.pos)
+
+
+
+
+
+
+
+
+        self.root = ScrollView(size_hint=(0.90, None) ,size=(Window.width,Window.height), pos_hint={"x":0.05,"top":0.60} )
+        self.root.add_widget(self.layout)
+        func.add_widget(self.root)
         func.add_widget(bar)
 
         self.add_widget(func)
@@ -738,6 +909,8 @@ class list_contry(Screen):
 
     def vers_info_contry(self,i,inst):
         welcomePage = FloatLayout()
+
+
         image2 = "attn.png"
         img = Image(source=str(image2), size_hint=(0.40, 0.270), pos_hint={'x': 0.30, 'y': 0.36},
                     allow_stretch=True, keep_ratio=False)
@@ -747,8 +920,10 @@ class list_contry(Screen):
         Clock.schedule_once(lambda *args: self.vers_info_contry_2(0,inst))
         self.p.dismiss()
 
+
     def vers_info_contry_2(self,i,inst):
-        sm.switch_to(info_contry(inst))
+
+        sm.switch_to(info_contry(inst , name = 'info_contry'))
         self.sound_sws = SoundLoader.load('sws.wav')
         if self.sound_sws:
             self.sound_sws.play()
@@ -769,9 +944,10 @@ class list_contry(Screen):
             return  True
 
 
-
-
 ################################### hkendemti  fine
+
+
+
 
 class result_vs(Screen):
     #code = StringProperty('')
@@ -890,7 +1066,7 @@ class result_vs(Screen):
         #https://googledrive.com/host/<folderID>/<filename>
         #https://drive.google.com/uc?id=FILE_ID
         image1 =  'flag/'+ acc[0] + '.png'
-        print(acc)
+
         image2 = 'flag/'+ acc[1] + '.png'
         img = Image(source=str(image1), size_hint=(0.2866, 0.15), pos_hint={'x': 0.05, 'y': 0.62},
                     allow_stretch=True, keep_ratio=False)
@@ -910,14 +1086,14 @@ class result_vs(Screen):
 
 
             self.btn = Button(text='hello', font_name='hemidi', size_hint_y=None, size_hint_x=0.3185185185,
-                         pos_hint={'x': 0.3, 'top': None}, height=40 )
+                         pos_hint={'x': 0.3, 'top': None}, height=60 )
             #print(v_contry1[i])
 
             self.btn1 = Button(text='hello2', font_name='hemidi', size_hint_y=None, size_hint_x=0.3185185185,
-                          pos_hint={'x': 0.3, 'top': None}, height=40 )
+                          pos_hint={'x': 0.3, 'top': None}, height=60 )
             self.btn2 = Button(text='gg', font_name='hemidi', size_hint_y=None, size_hint_x=0.3185185185,
                               pos_hint={'x': 0.3, 'top': None},
-                              height=40)
+                              height=60)
 
 
 
@@ -930,7 +1106,7 @@ class result_vs(Screen):
             self.layout.add_widget(self.btn1)
             self.layout.add_widget(self.btn2)
 
-            reshaped_text = (status[i])
+            reshaped_text = ar.reshape((status1[i]))
             self.bidi_text = get_display(reshaped_text)
 
 
@@ -977,6 +1153,7 @@ class result_vs(Screen):
             if self.sound_sws:
                 self.sound_sws.play()
             return  True
+
 
 
 class jeux_embdad(Screen): #welcomeScreen subclass
@@ -1074,12 +1251,23 @@ class jeux_embdad(Screen): #welcomeScreen subclass
 
             nome_image = os.listdir(r"%s"%(self.file_j))
 
+
             self.img_embdad = random.choice(nome_image)
 
             welcomePage = FloatLayout()
             image2 = "%s/%s"%(str(self.file_j),str(self.img_embdad))
             nome_image.remove(self.img_embdad)
-            cont =random.choices(nome_image , k=3)
+            #cont =random.choices(nome_image , k=3) #malaysia
+            cont = []
+            im1 = random.choice(nome_image)
+            nome_image.remove(im1)
+            cont.append(im1)
+            im2 = random.choice(nome_image)
+            nome_image.remove(im2)
+            cont.append(im2)
+            im3 = random.choice(nome_image)
+            nome_image.remove(im3)
+            cont.append(im3)
             cont.append(self.img_embdad)
             #image2 = "embadad/spain.png"
             img = Image(source=str(image2), size_hint=(0.90, 0.30), pos_hint={'x': 0.05, 'y': 0.40},
@@ -1101,23 +1289,23 @@ class jeux_embdad(Screen): #welcomeScreen subclass
 
 
             l1 = random.choice(cont)
-            welcomeBox1 = Button(text=str(l1), size_hint=(0.44, 0.1), pos_hint={"x": 0.05, "top": 0.35},background_color = (0.,0.,0.,0.))
+            welcomeBox1 = Button(text=get_display(ar.reshape(dect.get(str(l1[:-4])))),font_name = 'hemidi' , size_hint=(0.44, 0.1), pos_hint={"x": 0.05, "top": 0.35},background_color = (0.,0.,0.,0.))
             welcomeBox1.bind(on_press=lambda *args: self.result_in(0,l1))
 
             cont.remove(l1)
             l2 = random.choice(cont)
-            welcomeBox2 = Button(text=str(l2), size_hint=(0.44, 0.1), pos_hint={"x": 0.51, "top": 0.35},background_color = (0.,0.,0.,0.))
+            welcomeBox2 = Button(text=get_display(ar.reshape(dect.get(str(l2[:-4])))), font_name = 'hemidi',size_hint=(0.44, 0.1), pos_hint={"x": 0.51, "top": 0.35},background_color = (0.,0.,0.,0.))
             welcomeBox2.bind(on_press=lambda *args: self.result_in(0,l2))
 
             cont.remove(l2)
             l3 = random.choice(cont)
-            welcomeBox3 = Button(text=str(l3), size_hint=(0.44, 0.1), pos_hint={"x": 0.05, "top": 0.22},background_color = (0.,0.,0.,0.))
+            welcomeBox3 = Button(text=get_display(ar.reshape(dect.get(str(l3[:-4])))), font_name='hemidi',size_hint=(0.44, 0.1), pos_hint={"x": 0.05, "top": 0.22},background_color = (0.,0.,0.,0.))
             welcomeBox3.bind(on_press=lambda *args: self.result_in(0,l3))
 
 
             cont.remove(l3)
             l4 = cont[0]
-            welcomeBox4 = Button(text=str(l4), size_hint=(0.44, 0.1), pos_hint={"x": 0.51, "top": 0.22},background_color = (0.,0.,0.,0.))
+            welcomeBox4 = Button(text=get_display(ar.reshape(dect.get(str(l4[:-4])))), font_name = 'hemidi',size_hint=(0.44, 0.1), pos_hint={"x": 0.51, "top": 0.22},background_color = (0.,0.,0.,0.))
             welcomeBox4.bind(on_press=lambda *args: self.result_in(0,l4))
             text = ar.reshape(text2)
             self.text_label = get_display(text)
@@ -1411,7 +1599,6 @@ class jeux_embdad(Screen): #welcomeScreen subclass
 
 
 
-
 class jeux_intro(Screen):
     code = ListProperty()
     def __init__(self, **kwargs): #constructor method
@@ -1675,6 +1862,9 @@ class jeux_intro(Screen):
                 self.sound_sws.play()
             return True
 
+
+
+
 class info_contry(Screen):
     #code = StringProperty('')
     code = ListProperty()
@@ -1784,9 +1974,9 @@ class info_contry(Screen):
         image1 =  'https://drive.google.com/uc?id=1Wo_j02PZP53uXoIVsw_5jXlkF0QWsnOh'   #flag.png'
         image1 = AsyncImage(source=image1)
         #print(acc) # nome contry  acc
-        image_flag1 = 'flag/' + acc  + '.jpg'
+        image_flag1 = 'flag/' + acc  + '.png'
         image_embdad1 = 'embadad/' + acc + '.png'
-        image_map1 = 'map/'+acc + '.jpg'
+        image_map1 = 'map/'+acc + '.png'
         image2 = 'flag.png'
         text_flag = u'العلم'
         text_flag = ar.reshape(text_flag)
@@ -1816,17 +2006,16 @@ class info_contry(Screen):
 
         self.func.add_widget(self.bar)
 
-
+        #print(len(data[1]))
+        #print(len(status1))
         for i in range(len(data[1])):
-
-
-
+            reshaped_text = ar.reshape((status1[i]))
             self.btn = Button(text='hello', font_name='hemidi', size_hint_y=None, size_hint_x=0.3185185185,
-                         pos_hint={'x': 0.3, 'top': None}, height=40 )
+                         pos_hint={'x': 0.3, 'top': None}, height=60 )
             #print(v_contry1[i])
 
-            self.btn1 = Button(text='hello2', font_name='hemidi', size_hint_y=None, size_hint_x=0.3185185185,
-                          pos_hint={'x': 0.3, 'top': None}, height=40 )
+            self.btn1 = Button(text=get_display(reshaped_text), font_name='hemidi', size_hint_y=None, size_hint_x=0.3185185185,
+                          pos_hint={'x': 0.3, 'top': None}, height=60 )
 
 
 
@@ -1840,12 +2029,12 @@ class info_contry(Screen):
             self.layout.add_widget(self.btn)
             self.layout.add_widget(self.btn1)
 
-            reshaped_text = (status[i])
+            reshaped_text = (status1[i])
             self.bidi_text = get_display(reshaped_text)
 
 
             setattr(self.btn, 'text', str(v_contry1[i]))
-            setattr(self.btn1, 'text', self.bidi_text)
+            #setattr(self.btn1, 'text', self.bidi_text)
 
         self.root = ScrollView(size_hint=(0.90, None), size=(Window.width, Window.height),
                           pos_hint={"x": 0.05, "top": 0.45})  # , size=(Window.width, Window.height)
@@ -1889,11 +2078,16 @@ class info_contry(Screen):
             # print(sm.next())
             # print(sm.previous())
             # EventLoop.window.bind(on_keyboard=self.hook_keyboard)
+            #Window.close()
             sm.switch_to(list_contry())
+            #sm.current_screen
             self.sound_sws = SoundLoader.load('sws.wav')
             if self.sound_sws:
                 self.sound_sws.play()
             return True
+
+
+
 
 
 if __name__ == '__main__':
@@ -1904,7 +2098,6 @@ if __name__ == '__main__':
         f.write("__version__ = '2.0.15'")
         f.close()
         import arabic_reshaper as ar
-
 
 
 
