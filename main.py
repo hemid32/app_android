@@ -3,6 +3,7 @@
 import datetime
 import kivy
 kivy.require('1.9.1')
+from kivmob import KivMob, TestIds , RewardedListenerInterface
 from kivy.app import App
 from kivy.uix.label import Label
 from kivy.uix.floatlayout import FloatLayout
@@ -41,11 +42,14 @@ from kivy.base import stopTouchApp
 
 class PanelBuilderApp(App):  # display the welcome screen
     def build(self):
-        global  dect , status1
+        global  dect , status1 , ads
+        ads = KivMob('ca-app-pub-1803778669602445~4508591340')
+        ads.new_banner('ca-app-pub-1803778669602445/4045093890', top_pos=False)
+
         dect = {'united-states-of-america':u'امريكا' , 'russia': u'روسيا' , 'china': u'الصين' ,  'india': u'الهند'  ,
         'japan': u'اليابان'  , 'south-korea': u'كورياالجنوبية' , 'france' :u'فرنسا'  , 'united-kingdom': u'بريطانيا' , 'egypt': u'مصر' , 'brazil': u'البرازيل' , 'turkey': u'تركيا',
         'italy': u'ايطاليا', 'germany': u'المانيا' , 'iran': u'ايران', 'pakistan': u'باكستان' , 'indonesia': u'اندونيسيا', 'saudi-arabia': u'السعودية' , 'israel': u'اسرائيل' ,
-        'australia': u'اوستراليا' , 'spain': u'اسبانيا' , 'poland': u'امركيا' , 'vietnam': u'فيتنام' , 'canada':  u'كندا', 'north-korea': u'كورياالشمالية' , 'taiwan': u'تايوان' , 'ukraine': u'اوكرانيا' ,
+        'australia': u'اوستراليا' , 'spain': u'اسبانيا' , 'poland': u'بولندا' , 'vietnam': u'فيتنام' , 'canada':  u'كندا', 'north-korea': u'كورياالشمالية' , 'taiwan': u'تايوان' , 'ukraine': u'اوكرانيا' ,
           'algeria': u'الجزائر' , 'south-africa': u'جنوب افريقيا' , 'switzerland':u'سويسرا'  , 'norway': u'النرويج' , 'sweden': u'السويد' , 'greece': u'اليونان' , 'czech-republic':u'التشيك'  ,
         'myanmar': u'مينمار' , 'netherlands': u'هولندا' , 'colombia': u'كولومبيا'  , 'mexico': u'المكسيك' , 'romania': u'رومانيا' , 'peru' : u'بيرو','venezuela': u'فنزويلا' , 'nigeria': u'نيجيريا' ,
         'argentina':  u' الارجنتين' , 'malaysia': u'ماليزيا' ,'united-arab-emirates': u'الامارات' , 'bangladesh': u'بنغلاديش' ,
@@ -113,8 +117,9 @@ class PanelBuilderApp(App):  # display the welcome screen
         self.sound_non = SoundLoader.load('clk.wav')
         if self.sound_non:
             self.sound_non.play()
-        return  sm
 
+
+        return  sm
 
 
     """ def stop(self, *largs):
@@ -129,6 +134,9 @@ class PanelBuilderApp(App):  # display the welcome screen
 class WelcomeScreen(Screen): #welcomeScreen subclass
     def __init__(self, **kwargs): #constructor method
         super(WelcomeScreen, self).__init__(**kwargs) #init parent
+        ads.show_banner()
+
+
 
         with self.canvas:
             Color(204/255, 204/255, 204/255,mode='rgb')
@@ -210,18 +218,17 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
 
             Color(45 / 255, 79 / 255, 112 / 255, mode='rgb')
 
-            Rectangle(size=(Window.width * 0.9, Window.height * 0.1), pos=(Window.width * 0.05, Window.height * 0.06))
             Rectangle(size=(Window.width * 0.9, Window.height * 0.1), pos=(Window.width * 0.05, Window.height * 0.50))
             Rectangle(size=(Window.width * 0.9, Window.height * 0.1), pos=(Window.width * 0.05, Window.height * 0.17))
             Rectangle(size=(Window.width * 0.9, Window.height * 0.1), pos=(Window.width * 0.05, Window.height * 0.28))
             Rectangle(size=(Window.width * 0.9, Window.height * 0.1), pos=(Window.width * 0.05, Window.height * 0.39))
 
         #welcomeBox1 = Button(text= self.bidi_text1,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.60} ,on_press=self.poptest)
-        welcomeBox2 = Button(text= self.bidi_text2 ,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.49} ,on_press=self.information,background_color = (0.,0.,0.,0.),markup = True)
-        welcomeBox3 = Button(text= self.bidi_text3,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.38} ,on_press=self.top_,background_color = (0.,0.,0.,0.))
+        welcomeBox2 = Button(text= self.bidi_text2 ,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.49} ,on_press=self.poptest2,background_color = (0.,0.,0.,0.),markup = True)
+        welcomeBox3 = Button(text= self.bidi_text3,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.38} ,on_press=self.gotojeux,background_color = (0.,0.,0.,0.))
         welcomeBox4 = Button(text= self.bidi_text4,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.27} ,on_press=self.top_,background_color = (0.,0.,0.,0.))
         welcomeBox1 = Button(text= self.bidi_text1,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.60} ,on_press=self.poptest, border =(25, 25, 25, 25),background_color = (0.,0.,0.,0.))
-        welcomeBox5 = Button(text= self.bidi_text5,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.16} ,on_press=self.exite ,background_color = (0.,0.,0.,0.)) # self.exite
+        welcomeBox5 = Button(text= self.bidi_text5,font_name = 'hemidi', size_hint =(0.90,0.1),pos_hint={"x":0.05,"top":0.27} ,on_press=self.exite ,background_color = (0.,0.,0.,0.)) # self.exite
         #img_ptn1 = Image(source='post_image.png', size_hint=(0.9, 0.1), pos_hint={'x': 0.05, 'top': 0.60},
         #                   allow_stretch=True, keep_ratio=False)
 
@@ -230,7 +237,7 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
         welcomePage.add_widget(welcomeBox1)
         welcomePage.add_widget(welcomeBox2)
         welcomePage.add_widget(welcomeBox3)
-        welcomePage.add_widget(welcomeBox4)
+        #welcomePage.add_widget(welcomeBox4)
         welcomePage.add_widget(welcomeBox5)
         welcomePage.add_widget(post_image)
         #welcomePage.add_widget(img_ptn1)
@@ -254,13 +261,32 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
         image2 = "attn.png"
         img = Image(source=str(image2), size_hint=(0.40, 0.270), pos_hint={'x': 0.30, 'y': 0.36},
                     allow_stretch=True, keep_ratio=False)
+        label_cont2 = Label(text=get_display(ar.reshape(u'عند اجراء مقارنة نسحب 4 نقاط من رصيدك')), font_name='hemidi', font_size='20sp', size_hint=(0.4, 0.2),
+                            pos_hint={'x': 0.3, 'top': 0.95}, markup=True)
+
+        welcomePage.add_widget(label_cont2)
         welcomePage.add_widget(img)
         self.p = Popup(content=welcomePage, auto_dismiss=False , title = get_display(ar.reshape(u'انتظر')) , title_font = 'hemidi')
 
+        ads.destroy_banner()
         self.p.open()
+
         Clock.schedule_once(self.mo9arana)
         self.p.dismiss()
 
+    def poptest2(self,i):
+
+        welcomePage = FloatLayout()
+        image2 = "attn.png"
+        img = Image(source=str(image2), size_hint=(0.40, 0.270), pos_hint={'x': 0.30, 'y': 0.36},
+                    allow_stretch=True, keep_ratio=False)
+        welcomePage.add_widget(img)
+        self.p = Popup(content=welcomePage, auto_dismiss=False , title = get_display(ar.reshape(u'انتظر')) , title_font = 'hemidi')
+
+        ads.destroy_banner()
+        self.p.open()
+        Clock.schedule_once(self.information)
+        self.p.dismiss()
 
 
 
@@ -269,6 +295,9 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
     def mo9arana(self, instance):
         #sm.add_widget(shose_contry(name='shose_contry'))
         sm.switch_to(shose_contry())
+        ads.request_banner()
+        ads.show_banner()
+
         self.sound_non = SoundLoader.load('sws.wav')
         if self.sound_non:
             self.sound_non.play()
@@ -287,8 +316,37 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
 
 
     def top_(self,instant):
-        ##############################
 
+        self.sound_non = SoundLoader.load('sws.wav')
+        if self.sound_non:
+            self.sound_non.play()
+        sm.switch_to(WelcomeScreen())
+
+
+
+
+    def handl(self):
+
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        db_path = BASE_DIR.replace("\\", "/") + '/data.db'
+        with sqlite3.connect(db_path) as db:
+            self.file_h = (db_path)
+            self.conn_h = sqlite3.connect(self.file_h)
+            self.cur_h = self.conn_h.cursor()
+            sql_h = ''' SELECT nombre_point FROM point'''
+            self.cur_h.execute(sql_h)
+            self.data_ = self.cur_h.fetchall()
+        n = self.data_[0][0]
+
+        self.cur_h.execute(''' UPDATE point  SET nombre_point = %s  WHERE nombre_point = %s;''' % (int(n) + 5, int(n)))
+        self.conn_h.commit()
+        sm.switch_to(WelcomeScreen())
+
+
+
+
+
+    def gotojeux(self,i):
         sm.switch_to(jeux_intro())
         self.sound_non = SoundLoader.load('sws.wav')
         if self.sound_non:
@@ -297,6 +355,9 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
 
     def home(self,inst,touch):
         if (touch.pos[0] >= Window.width*0.10 and touch.pos[0] <= Window.width*0.18 ) and (touch.pos[1] >= Window.height*0.89 and touch.pos[1] <= Window.height*0.97)  :
+            self.sound_non = SoundLoader.load('sws.wav')
+            if self.sound_non:
+                self.sound_non.play()
             sm.switch_to(WelcomeScreen())
 
         # x entre [Window.width*0.10 , Window.width*0.18 ]
@@ -333,27 +394,9 @@ class WelcomeScreen(Screen): #welcomeScreen subclass
         self.popup.dismiss()
         sm.switch_to(WelcomeScreen())
     def quit(self,*args):
-        #App.get_running_app().stop()
-        #time.sleep(0.5)
-        #self.popup.dismiss()
-        self.popup.dismiss()
-        #App.get_running_app().stop()
-        #App.get_running_app().stop()
-        #App.root_window.close()
-        #self.root_window.close()  # Fix app exit on Android.
-        #return super(MyApp, self).stop(*largs)
 
-        #PanelBuilderApp.root_window()
-        #stopTouchApp()
-        #self.get_root_window().close()
-        #PanelBuilderApp().on_stop()
-        #stopTouchApp()
-        #App.get_running_app().stop()
-        #App.get_running_app().stop()
-        #return  True
-        #PanelBuilderApp().stop()
-        #Window.close()
-        #stopTouchApp()
+        self.popup.dismiss()
+
         try:
             App.root_window.close()
         except :
@@ -389,14 +432,15 @@ class shose_contry(Screen):
     sm = ScreenManager()
     def __init__(self, **kwargs): #constructor method
         super(shose_contry, self).__init__(**kwargs) #init parent
+
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
         self.ruselt_1 = False
 
+        ###################### ads  ###########################
+        #####
 
 
 
-
-        ############# data base ââââââââââââââââ
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         db_path = BASE_DIR.replace("\\", "/") + '/data.db'
 
@@ -529,6 +573,7 @@ class shose_contry(Screen):
 
     def get_key(self,i,val):
         #print(val)
+        f = 0
         for i in dect.values():
 
 
@@ -536,17 +581,20 @@ class shose_contry(Screen):
                 for key, value in dect.items():
                     # print(val , value)
                     if i == value:
+                        f = 1
                         return key
             else :
                 #return 'nnnnnnn'
                 pass
+        if f == 0 :
+            return False
 
 
     def return_val(self,instant ):
 
         val2 =  self.get_key(0,self.mainbutton2.text) #dect[self.get_key(0,get_display(ar.reshape(self.mainbutton2.text)))]
         val1 =  self.get_key(0,self.mainbutton.text)
-        print(val1 , val2)
+
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         db_path = BASE_DIR.replace("\\", "/") + '/data.db'
         self.file_h = (db_path)
@@ -556,8 +604,10 @@ class shose_contry(Screen):
         self.cur_h.execute(sql_h)
         self.data_ = self.cur_h.fetchall()
         #print(val2,val1)
+        #print(self.text_1)
 
-        if not (val1 == self.text_1 or val2 == self.text_1) :
+        if not (val1 == False or val2 == False) :
+            ads.destroy_banner()
             if not (self.data_[0][0] < 15):
                 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
                 db_path = BASE_DIR.replace("\\", "/") + '/data.db'
@@ -623,8 +673,8 @@ class shose_contry(Screen):
         image2 = "cr.png"
         img = Image(source=str(image2), size_hint=(0.40, 0.27), pos_hint={'x': 0.30, 'y': 0.36},
                     allow_stretch=True, keep_ratio=False)
-        btn1 = Button(text=self.bidi_text4,font_name = 'hemidi' ,size_hint=(0.42, 0.1), pos_hint={"x": 0.07, "top": 0.30})
-        btn = Button(text=self.bidi_text3,font_name = 'hemidi' , size_hint=(0.42, 0.1), pos_hint={"x": 0.51, "top": 0.30})
+        btn1 = Button(text=self.bidi_text4,font_name = 'hemidi' ,size_hint=(0.47, 0.1), pos_hint={"x": 0.02, "top": 0.30})
+        btn = Button(text=self.bidi_text3,font_name = 'hemidi' , size_hint=(0.47, 0.1), pos_hint={"x": 0.51, "top": 0.30})
         label_cont2 = Label(text=self.bidi_text5,font_name='hemidi', font_size='20sp',size_hint=(0.4, 0.2), pos_hint={'x': 0.3, 'top': 0.95},markup = True)
 
 
@@ -666,7 +716,7 @@ class shose_contry(Screen):
         #self.manager.current = 'result_vs' #result_vs
         #self.manager.screens[2].ids.btn.text = self.mainbutton2.text
         if (touch.pos[0] >= Window.width*0.10 and touch.pos[0] <= Window.width*0.18 ) and (touch.pos[1] >= Window.height*0.89 and touch.pos[1] <= Window.height*0.97)  :
-
+            ads.destroy_banner()
             sm.switch_to(WelcomeScreen())
             self.sound_sws = SoundLoader.load('sws.wav')
             if self.sound_sws:
@@ -683,25 +733,30 @@ class shose_contry(Screen):
             #EventLoop.window.bind(on_keyboard=self.hook_keyboard)
             if self.ruselt_1  == True :
                 self.popup.dismiss()
+                ads.destroy_banner()
                 sm.switch_to(WelcomeScreen())
                 self.sound_sws = SoundLoader.load('sws.wav')
                 if self.sound_sws:
                     self.sound_sws.play()
+
                 return True
             else :
-
+                ads.destroy_banner()
                 sm.switch_to(WelcomeScreen())
                 self.sound_sws = SoundLoader.load('sws.wav')
                 if self.sound_sws:
                     self.sound_sws.play()
+
                 return  True
 
 
 class list_contry(Screen):
     def __init__(self, **kwargs ): #constructor method
         super( list_contry,self).__init__(**kwargs) #init parent
+        ads.destroy_banner()
         self.hh(0)
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
+
 
 
 
@@ -861,15 +916,52 @@ class list_contry(Screen):
         self.btn38=   Button(text=get_display(ar.reshape(dect.get(str(self.data[37][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[37][28])) )
         self.btn39=   Button(text=get_display(ar.reshape(dect.get(str(self.data[38][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[38][28])) )
         self.btn40 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[39][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[39][28])) )
+        self.btn41 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[40][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[40][28])) )
+        self.btn42 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[41][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[41][28])) )
+        self.btn43 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[42][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[42][28])) )
+        self.btn44 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[43][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[42][28])) )
+        self.btn45 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[44][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[44][28])) )
+        self.btn46 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[45][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[45][28])) )
+        self.btn47 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[46][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[46][28])) )
+        self.btn48 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[47][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[47][28])) )
+        self.btn49 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[48][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[48][28])) )
+        self.btn50 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[49][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[49][28])) )
+        self.btn51 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[50][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[50][28])) )
+        self.btn52 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[51][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[51][28])) )
+        self.btn53 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[52][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[52][28])) )
+        self.btn54 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[53][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[53][28])) )
+        self.btn55 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[54][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[54][28])) )
+        self.btn56 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[55][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[55][28])) )
+        self.btn57 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[56][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[56][28])) )
+        self.btn58 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[57][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[57][28])) )
+        self.btn59 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[58][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[58][28])) )
+        self.btn60 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[59][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[59][28])) )
+        self.btn61 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[60][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[60][28])) )
+        self.btn62 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[61][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[61][28])) )
+        self.btn63 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[62][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[62][28])) )
+        self.btn64 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[63][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[63][28])) )
+        self.btn65 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[64][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[64][28])) )
+        self.btn66 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[65][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[65][28])) )
+        self.btn67 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[66][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[66][28])) )
+        self.btn68 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[67][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[67][28])) )
+        self.btn69 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[68][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[68][28])) )
+        self.btn70 =   Button(text=get_display(ar.reshape(dect.get(str(self.data[69][28])))), font_name = 'hemidi',size_hint_y=None,size_hint_x=1.,pos_hint={'x':0.05 ,'top':None} ,height=80 , on_press =lambda  *args : self.vers_info_contry(0,str(self.data[69][28])) )
 
         lst  = [self.btn1,self.btn2,self.btn3,self.btn4,self.btn5 , self.btn6 , self.btn7,self.btn8,self.btn9,self.btn10,self.btn11,self.btn12 , self.btn13  ,
                 self.btn14, self.btn15, self.btn16, self.btn17, self.btn18, self.btn19, self.btn20, self.btn21, self.btn22,
                 self.btn23, self.btn24, self.btn25, self.btn26 ,
                 self.btn27, self.btn28, self.btn29, self.btn30, self.btn31, self.btn32, self.btn33, self.btn34, self.btn35,
-                self.btn36, self.btn37, self.btn38, self.btn39 , self.btn40
+                self.btn36, self.btn37, self.btn38, self.btn39 , self.btn40,
+                self.btn41, self.btn42, self.btn43, self.btn44, self.btn45, self.btn46, self.btn47, self.btn48,self.btn49 ,
+                self.btn50 , self.btn51 , self.btn52 , self.btn53, self.btn54,self.btn55, self.btn56, self.btn57, self.btn58, self.btn59, self.btn60, self.btn61, self.btn62,
+                self.btn63,self.btn64, self.btn65, self.btn66, self.btn67, self.btn68 , self.btn69 , self.btn70
+
 
 
                 ]
+        """self.btn55, self.btn56, self.btn57, self.btn58, self.btn59, self.btn60, self.btn61, self.btn62,
+        self.btn63,
+        self.btn64, self.btn65, self.btn66, self.btn67, self.btn68, self.btn49,self.btn50, self.btn51, self.btn52, self.btn53, self.btn54,"""
         i = 0
         for  ig  in  lst :
             """self.btn1 = Button(text=str(ig[28]), size_hint_y=None, size_hint_x=1.,
@@ -899,6 +991,7 @@ class list_contry(Screen):
     def home(self,instant,touch):
         #self.manager.current = 'welcomeScreen'
         if (touch.pos[0] >= Window.width*0.10 and touch.pos[0] <= Window.width*0.18 ) and (touch.pos[1] >= Window.height*0.89 and touch.pos[1] <= Window.height*0.97)  :
+            ads.destroy_banner()
             sm.switch_to(WelcomeScreen())
             self.sound_sws = SoundLoader.load('sws.wav')
             if self.sound_sws:
@@ -916,6 +1009,7 @@ class list_contry(Screen):
                     allow_stretch=True, keep_ratio=False)
         welcomePage.add_widget(img)
         self.p = Popup(content=welcomePage, auto_dismiss=False, title = get_display(ar.reshape(u'انتظر')) , title_font = 'hemidi')
+        ads.destroy_banner()
         self.p.open()
         Clock.schedule_once(lambda *args: self.vers_info_contry_2(0,inst))
         self.p.dismiss()
@@ -937,6 +1031,7 @@ class list_contry(Screen):
             # print(sm.next())
             # print(sm.previous())
             #EventLoop.window.bind(on_keyboard=self.hook_keyboard)
+            ads.destroy_banner()
             sm.switch_to(WelcomeScreen())
             self.sound_sws = SoundLoader.load('sws.wav')
             if self.sound_sws:
@@ -947,13 +1042,12 @@ class list_contry(Screen):
 ################################### hkendemti  fine
 
 
-
-
 class result_vs(Screen):
     #code = StringProperty('')
     code = ListProperty()
     def __init__(self,acc, **kwargs ): #constructor method
         super(result_vs, self).__init__(**kwargs) #init parent
+        ads.destroy_banner()
         EventLoop.window.bind(on_keyboard=self.poptest)
         self.lk = 0
         self.lk += 1
@@ -1129,7 +1223,7 @@ class result_vs(Screen):
             pass
     def home(self,instant,touch):
         if (touch.pos[0] >= Window.width*0.10 and touch.pos[0] <= Window.width*0.18 ) and (touch.pos[1] >= Window.height*0.89 and touch.pos[1] <= Window.height*0.97)  :
-
+            ads.destroy_banner()
             sm.switch_to(WelcomeScreen())
             self.sound_sws = SoundLoader.load('sws.wav')
             if self.sound_sws:
@@ -1148,6 +1242,7 @@ class result_vs(Screen):
 
     def poptest(self,window , key , *args):
         if key == 27 :
+            ads.destroy_banner()
             sm.switch_to(WelcomeScreen())
             self.sound_sws = SoundLoader.load('sws.wav')
             if self.sound_sws:
@@ -1155,11 +1250,12 @@ class result_vs(Screen):
             return  True
 
 
-
 class jeux_embdad(Screen): #welcomeScreen subclass
     coord = StringProperty('')
     def __init__(self, hemidi, rune, **kwargs): #constructor method
         super(jeux_embdad, self).__init__(**kwargs) #init parent
+        ads.request_banner()
+        ads.show_banner()
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
 
         with self.canvas:
@@ -1270,7 +1366,7 @@ class jeux_embdad(Screen): #welcomeScreen subclass
             cont.append(im3)
             cont.append(self.img_embdad)
             #image2 = "embadad/spain.png"
-            img = Image(source=str(image2), size_hint=(0.90, 0.30), pos_hint={'x': 0.05, 'y': 0.40},
+            img = Image(source=str(image2), size_hint=(0.80, 0.30), pos_hint={'x': 0.1, 'y': 0.40},
                         allow_stretch=True, keep_ratio=False)
 
             with self.canvas:
@@ -1278,34 +1374,34 @@ class jeux_embdad(Screen): #welcomeScreen subclass
                 Color(45 / 255, 79 / 255, 112 / 255, mode='rgb')
 
                 Rectangle(size=(Window.width * 0.44, Window.height * 0.1),
-                          pos=(Window.width * 0.05, Window.height * 0.25))
+                          pos=(Window.width * 0.05, Window.height * 0.28))
                 Rectangle(size=(Window.width * 0.44, Window.height * 0.1),
-                          pos=(Window.width * 0.51, Window.height * 0.25))
+                          pos=(Window.width * 0.51, Window.height * 0.28))
                 Rectangle(size=(Window.width * 0.44, Window.height * 0.1),
-                          pos=(Window.width * 0.05, Window.height * 0.12))
+                          pos=(Window.width * 0.05, Window.height * 0.15))
                 Rectangle(size=(Window.width * 0.44, Window.height * 0.1),
-                          pos=(Window.width * 0.51, Window.height * 0.12))
+                          pos=(Window.width * 0.51, Window.height * 0.15))
 
 
 
             l1 = random.choice(cont)
-            welcomeBox1 = Button(text=get_display(ar.reshape(dect.get(str(l1[:-4])))),font_name = 'hemidi' , size_hint=(0.44, 0.1), pos_hint={"x": 0.05, "top": 0.35},background_color = (0.,0.,0.,0.))
+            welcomeBox1 = Button(text=get_display(ar.reshape(dect.get(str(l1[:-4])))),font_name = 'hemidi' , size_hint=(0.44, 0.1), pos_hint={"x": 0.05, "top": 0.38},background_color = (0.,0.,0.,0.))
             welcomeBox1.bind(on_press=lambda *args: self.result_in(0,l1))
 
             cont.remove(l1)
             l2 = random.choice(cont)
-            welcomeBox2 = Button(text=get_display(ar.reshape(dect.get(str(l2[:-4])))), font_name = 'hemidi',size_hint=(0.44, 0.1), pos_hint={"x": 0.51, "top": 0.35},background_color = (0.,0.,0.,0.))
+            welcomeBox2 = Button(text=get_display(ar.reshape(dect.get(str(l2[:-4])))), font_name = 'hemidi',size_hint=(0.44, 0.1), pos_hint={"x": 0.51, "top": 0.38},background_color = (0.,0.,0.,0.))
             welcomeBox2.bind(on_press=lambda *args: self.result_in(0,l2))
 
             cont.remove(l2)
             l3 = random.choice(cont)
-            welcomeBox3 = Button(text=get_display(ar.reshape(dect.get(str(l3[:-4])))), font_name='hemidi',size_hint=(0.44, 0.1), pos_hint={"x": 0.05, "top": 0.22},background_color = (0.,0.,0.,0.))
+            welcomeBox3 = Button(text=get_display(ar.reshape(dect.get(str(l3[:-4])))), font_name='hemidi',size_hint=(0.44, 0.1), pos_hint={"x": 0.05, "top": 0.25},background_color = (0.,0.,0.,0.))
             welcomeBox3.bind(on_press=lambda *args: self.result_in(0,l3))
 
 
             cont.remove(l3)
             l4 = cont[0]
-            welcomeBox4 = Button(text=get_display(ar.reshape(dect.get(str(l4[:-4])))), font_name = 'hemidi',size_hint=(0.44, 0.1), pos_hint={"x": 0.51, "top": 0.22},background_color = (0.,0.,0.,0.))
+            welcomeBox4 = Button(text=get_display(ar.reshape(dect.get(str(l4[:-4])))), font_name = 'hemidi',size_hint=(0.44, 0.1), pos_hint={"x": 0.51, "top": 0.25},background_color = (0.,0.,0.,0.))
             welcomeBox4.bind(on_press=lambda *args: self.result_in(0,l4))
             text = ar.reshape(text2)
             self.text_label = get_display(text)
@@ -1393,6 +1489,7 @@ class jeux_embdad(Screen): #welcomeScreen subclass
                 self.sound_sws.play()
 
     def result_in(self,n , l):
+        ads.destroy_banner()
         self.sound_time = SoundLoader.load('time.wav')
         if self.sound_time:
             self.sound_time.stop()
@@ -1568,6 +1665,7 @@ class jeux_embdad(Screen): #welcomeScreen subclass
             # EventLoop.window.bind(on_keyboard=self.hook_keyboard)
             if  self.ruselta == True :
                 self.event.cancel()
+                ads.destroy_banner()
                 setattr(jeux_embdad, self.rune, 'non')
                 setattr(jeux_embdad, self.XI, '0')
                 self.XI = '0'
@@ -1583,6 +1681,7 @@ class jeux_embdad(Screen): #welcomeScreen subclass
             else :
 
                 self.event.cancel()
+                ads.destroy_banner()
                 setattr(jeux_embdad, self.rune, 'non')
                 setattr(jeux_embdad, self.XI, '0')
                 self.XI = '0'
@@ -1596,13 +1695,11 @@ class jeux_embdad(Screen): #welcomeScreen subclass
                 return True
 
 
-
-
-
 class jeux_intro(Screen):
     code = ListProperty()
     def __init__(self, **kwargs): #constructor method
         super(jeux_intro, self).__init__(**kwargs) #init parent
+        ads.destroy_banner()
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
         with self.canvas:
             Color(204 / 255, 204 / 255, 204 / 255, mode='rgb')
@@ -1863,8 +1960,6 @@ class jeux_intro(Screen):
             return True
 
 
-
-
 class info_contry(Screen):
     #code = StringProperty('')
     code = ListProperty()
@@ -2079,7 +2174,7 @@ class info_contry(Screen):
             # print(sm.previous())
             # EventLoop.window.bind(on_keyboard=self.hook_keyboard)
             #Window.close()
-            sm.switch_to(list_contry())
+            sm.switch_to(WelcomeScreen())
             #sm.current_screen
             self.sound_sws = SoundLoader.load('sws.wav')
             if self.sound_sws:
@@ -2088,13 +2183,12 @@ class info_contry(Screen):
 
 
 
-
-
 if __name__ == '__main__':
     try :
         import arabic_reshaper as ar
     except:
-        f = open('/data/user/0/org.test.myapp/files/app/_python_bundle/site-packages/arabic_reshaper/__version__.py', 'w')
+        BASE_DIR = '/data/user/0/android.kivy.org.myapp/files/app/_python_bundle/site-packages/arabic_reshaper/__version__.py'
+        f = open(BASE_DIR, 'w')
         f.write("__version__ = '2.0.15'")
         f.close()
         import arabic_reshaper as ar
